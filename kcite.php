@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.5
+   Version: 1.7.6
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -1030,9 +1030,13 @@ EOT;
        // decode it here, then re-encode it later.
        $json_decoded = json_decode( $cite->resolution_source, true );
 
-       // crossref returns both url and raw DOI. We don't need the later, so delete it. 
+       // crossref returns both url and DOI. We don't need the latter, so delete it. 
+       // The url has the wrong format: using the obsolete dx.doi.org proxy for Crossref
+       // and the url the DOI redirects to for DataCite.
+       $json_decoded["URL"] = 
+           "https://doi.org/" . $json_decoded["DOI"];
        unset( $json_decoded[ "DOI" ] );
-       
+
        $json_decoded["source"] = $cite->source;
        $json_decoded["identifier"] = $cite->identifier;
        $json_decoded["resolved"] = $cite->resolved;
