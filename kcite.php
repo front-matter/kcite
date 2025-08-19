@@ -111,7 +111,9 @@ class KCite{
   static function kcite_template_redirect(){
       global $wp_query;
       
-      if( $wp_query->query_vars["kcite-format"] == "json"
+      if( isset($wp_query->query_vars["kcite-format"]) 
+          && $wp_query->query_vars["kcite-format"] == "json"
+          && isset($wp_query->query_vars["kcite-p"])
           && $wp_query->query_vars[ "kcite-p" ] > 0 
           ){    
 
@@ -124,7 +126,7 @@ class KCite{
           }
           
           self::$bibliography = new Bibliography();
-          self::$bibliography->section = $wp_query->query_vars[ "kcite-p" ];
+          self::$bibliography->section = (int)$wp_query->query_vars[ "kcite-p" ];
           
           self::$bibliography->add_cites_array( $cites_array );
           $cites = self::resolve_metadata( self::$bibliography->get_cites() );
@@ -217,6 +219,14 @@ $content
       self::$add_script = true;
       self::instantiate_bibliography();
 
+      // Default attributes to prevent undefined key warnings
+      $atts = shortcode_atts(array(
+          'author' => '',
+          'title' => '',
+          'date' => '',
+          'location' => ''
+      ), $atts);
+
       // store citation in bibliography. Replace anchor. 
       $cite = new Citation();
       $cite->source="inline";
@@ -288,8 +298,12 @@ $content
       }
       else{
           $stubs = self::$stubs;
-          $url = $stubs[$cite->source] . $cite->identifier;
-          $in_text = "<a href=\"$url\">$url</a>";
+          if (isset($stubs[$cite->source])) {
+              $url = $stubs[$cite->source] . $cite->identifier;
+              $in_text = "<a href=\"$url\">$url</a>";
+          } else {
+              $in_text = $cite->identifier;
+          }
           $anchor = self::$bibliography->add_cite( $cite )->anchor;
           return "<span class=\"kcite\" kcite-id=\"$anchor\">($in_text)</span>";
       }
