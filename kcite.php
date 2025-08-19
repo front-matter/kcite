@@ -45,18 +45,18 @@ class KCite{
   static $block_javascript = false;
   static $stubs = array
       (
-       "doi" => "http://dx.doi.org/",
-       "pubmed" => "http://www.ncbi.nlm.nih.gov/pubmed/",
-       "arxiv" => "http://arxiv.org/abs/",
+       "doi" => "https://doi.org/",
+       "pubmed" => "https://www.ncbi.nlm.nih.gov/pubmed/",
+       "arxiv" => "https://arxiv.org/abs/",
        "url" => "",
        );
   
   static $id_matchers = array
       (
-       "doi" => array( "#http://dx\.doi\.org/(\S+)#", "#doi:(\S+)#" ),
-       "pubmed" => array( "#http://www\.ncbi\.nlm\.nih\.gov/pubmed/(\S+)#", "#pubmed:(\S+)#" ),
-       "arxiv" => array( "#http://arxiv\.org/abs/(\S+)#", "#arxiv:(\S+)#" ),
-       "url" => array( "#(http\S+)#" ),
+       "doi" => array( "#https://dx\.doi\.org/(\S+)#", "#doi:(\S+)#" ),
+       "pubmed" => array( "#https://www\.ncbi\.nlm\.nih\.gov/pubmed/(\S+)#", "#pubmed:(\S+)#" ),
+       "arxiv" => array( "#https://arxiv\.org/abs/(\S+)#", "#arxiv:(\S+)#" ),
+       "url" => array( "#(https?://\S+)#" ),
        );
   
 
@@ -434,7 +434,7 @@ EOT;
               
               //sufficient missing to assume no publication retrieved...
               if (array_key_exists( "DOI", $pub ) && $pub['DOI']) {
-                  $bib_string .= "<li>$anchor<a href='http://dx.doi.org/".
+                  $bib_string .= "<li>$anchor<a href='https://doi.org/".
                       $pub['DOI']."'>DOI:".$pub['DOI'].
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
