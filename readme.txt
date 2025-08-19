@@ -63,6 +63,12 @@ contact the authors, please email knowledgeblog@googlegroups.com.
 
 == Upgrade Notice ==
 
+= 1.7.1 =
+
+1. Included popular citation styles as current CSL style files. 
+1. Use latest citeproc.js
+1. Use https and doi.org instead of dx.doi.org 
+
 = 1.7.0 =
 
 Added compatibility with Wordpress 6.8 and PHP 8.4.
