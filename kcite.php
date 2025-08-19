@@ -683,16 +683,9 @@ EOT;
    */
   private static function dx_doi_lookup($cite) {
 
-      $url = "http://dx.doi.org/{$cite->identifier}";
+      $url = "http://doi.org/{$cite->identifier}";
       
       $params = array(
-                      // the order here is important, as both datacite and crossrefs content negotiation is broken. 
-                      // crossref only return the highest match, but do check other content
-                      // types. So, should return json. Datacite is broken, so only return the first
-                      // content type, which should be XML.
-                      
-                      // datacite now returns JSON, so this should be much simpler
-
                       'headers' => 
                       array( 'Accept' => 
                              "application/citeproc+json"),
