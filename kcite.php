@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.4
+   Version: 1.7.5
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -409,7 +409,6 @@ EOT;
       $bib_string = "<h2>References</h2>
     <ol>
     ";
-      $temp = strval( $pub_array );
       
       foreach ($pub_array as $pub) {
           
@@ -688,7 +687,7 @@ EOT;
       $params = array(
                       'headers' => 
                       array( 'Accept' => 
-                             "application/citeproc+json"),
+                             "application/vnd.citationstyles.csl+json"),
                       );
       
       
@@ -714,25 +713,10 @@ EOT;
           return $cite;
       }            
 
-      if( $contenttype == "application/citeproc+json" ){
-          // crossref DOI
-          $cite->resolved = true;
-          $cite->resolution_source=$response;
-          $cite->resolved_from="doi";
+      $cite->resolved = true;
+      $cite->resolution_source=$response;
+      $cite->resolved_from="doi";
 
-          return $cite;
-      }
-              
-//       if( $contenttype == "application/x-datacite+xml" ){
-//           //datacite DOI
-//           $cite->resolved = true;
-//           $cite->resolution_source=$response;
-//           $cite->resolved_from="datacite";
-// 
-//           return $cite;
-//       }
-
-      // so it's a DOI which is neither datacite nor crossref -- we should turn this into a URL, therefore. 
       return $cite;
   }
 
