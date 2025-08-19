@@ -10608,6 +10608,9 @@ CSL.Transform = function (state) {
   }
   this.getHereinafter = getHereinafter;
   function quashCheck(value) {
+    if (typeof value !== "string" || !value) {
+      return value;
+    }
     var m = value.match(/^!([-,_a-z]+)<<</);
     if (m) {
       var fields = m[1].split(",");
