@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.3
+   Version: 1.7.4
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -53,7 +53,7 @@ class KCite{
   
   static $id_matchers = array
       (
-       "doi" => array( "#https://dx\.doi\.org/(\S+)#", "#doi:(\S+)#" ),
+       "doi" => array( "#https://doi\.org/(\S+)#", "#doi:(\S+)#" ),
        "pubmed" => array( "#https://www\.ncbi\.nlm\.nih\.gov/pubmed/(\S+)#", "#pubmed:(\S+)#" ),
        "arxiv" => array( "#https://arxiv\.org/abs/(\S+)#", "#arxiv:(\S+)#" ),
        "url" => array( "#(https?://\S+)#" ),
@@ -623,9 +623,9 @@ EOT;
 
           if ($cite->source == 'doi') {
               // should work on datacite or crossref lookup
-              $cite = self::dx_doi_lookup($cite);
-              
-              if($cite->resolved && $cite->resolved_from=="dx-doi" ){
+              $cite = self::doi_lookup($cite);
+
+              if($cite->resolved && $cite->resolved_from=="doi") {
                   $cite = self::get_crossref_metadata($cite);
               }
           }
@@ -681,7 +681,7 @@ EOT;
    * @param string $pub_doi A doi representing a reference
    * @return 
    */
-  private static function dx_doi_lookup($cite) {
+  private static function doi_lookup($cite) {
 
       $url = "http://doi.org/{$cite->identifier}";
       
@@ -718,8 +718,8 @@ EOT;
           // crossref DOI
           $cite->resolved = true;
           $cite->resolution_source=$response;
-          $cite->resolved_from="dx-doi";
-          
+          $cite->resolved_from="doi";
+
           return $cite;
       }
               

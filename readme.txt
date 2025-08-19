@@ -1,6 +1,6 @@
 === KCite ===
 
-Contributors: philliplord, sjcockell, knowledgeblog, d_swan
+Contributors: philliplord, sjcockell, knowledgeblog, d_swan, mfenner
 Tags: references, citations, doi, crossref, pubmed, bibliography, pmid, res-comms, scholar, academic, science
 Requires at least: 3.0
 Tested up to: 6.8
