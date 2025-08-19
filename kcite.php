@@ -3,8 +3,8 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.6.3
-   Author: Simon Cockell, Phillip Lord
+   Version: 1.7.1
+   Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
    
@@ -45,25 +45,25 @@ class KCite{
   static $block_javascript = false;
   static $stubs = array
       (
-       "doi" => "http://dx.doi.org/",
-       "pubmed" => "http://www.ncbi.nlm.nih.gov/pubmed/",
-       "arxiv" => "http://arxiv.org/abs/",
+       "doi" => "https://doi.org/",
+       "pubmed" => "https://www.ncbi.nlm.nih.gov/pubmed/",
+       "arxiv" => "https://arxiv.org/abs/",
        "url" => "",
        );
   
   static $id_matchers = array
       (
-       "doi" => array( "#http://dx\.doi\.org/(\S+)#", "#doi:(\S+)#" ),
-       "pubmed" => array( "#http://www\.ncbi\.nlm\.nih\.gov/pubmed/(\S+)#", "#pubmed:(\S+)#" ),
-       "arxiv" => array( "#http://arxiv\.org/abs/(\S+)#", "#arxiv:(\S+)#" ),
-       "url" => array( "#(http\S+)#" ),
+       "doi" => array( "#https://dx\.doi\.org/(\S+)#", "#doi:(\S+)#" ),
+       "pubmed" => array( "#https://www\.ncbi\.nlm\.nih\.gov/pubmed/(\S+)#", "#pubmed:(\S+)#" ),
+       "arxiv" => array( "#https://arxiv\.org/abs/(\S+)#", "#arxiv:(\S+)#" ),
+       "url" => array( "#(https?://\S+)#" ),
        );
   
 
   /**
    * Adds filters and hooks necessary initializiation. 
    */
-  function init(){
+  static function init(){
     //add bibliography to post content
     // priority 12 is lower than shortcode (11), so can assure that this runs
     // after the shortcode filter does, otherwise, it is all going to work
@@ -102,13 +102,13 @@ class KCite{
   }
 
   
-  function kcite_query_vars( $query_vars ){
+  static function kcite_query_vars( $query_vars ){
       $query_vars[] = "kcite-format";
       $query_vars[] = "kcite-p";
       return $query_vars;
   }
 
-  function kcite_template_redirect(){
+  static function kcite_template_redirect(){
       global $wp_query;
       
       if( $wp_query->query_vars["kcite-format"] == "json"
@@ -139,7 +139,7 @@ class KCite{
   /**
    * Section filter -- defines a section header
    */
-  function bibliography_section_filter($content){
+  static function bibliography_section_filter($content){
       $postid = get_the_ID();
       return 
           "<div class=\"kcite-section\" kcite-section-id=\"$postid\">
@@ -147,11 +147,11 @@ $content
 </div> <!-- kcite-section $postid -->";
   }
 
-  function javascript_render_p(){
+  static function javascript_render_p(){
       return get_option( "kcite_citation_render_client" ) && !self::$block_javascript;
   }
 
-  function get_timeout(){
+  static function get_timeout(){
       // if we have blocked javascript, we probably waiting for a human
       if( self::$block_javascript ){
           return 2;
@@ -165,7 +165,7 @@ $content
   }
 
 
-  function add_script(){
+  static function add_script(){
       echo "<!-- Kcite Plugin Installed";
 
       if( !self::$add_script ){
@@ -204,7 +204,7 @@ $content
       }
   }
 
-  function instantiate_bibliography(){
+  static function instantiate_bibliography(){
       // lazy instantiate bib
       if( !isset( self::$bibliography ) ){
           self::$bibliography = new Bibliography();
@@ -213,7 +213,7 @@ $content
   }
 
 
-  function fullcite_shortcode($atts,$content){
+  static function fullcite_shortcode($atts,$content){
       self::$add_script = true;
       self::instantiate_bibliography();
 
@@ -231,55 +231,52 @@ $content
    * citation short code
    */
 
-  function cite_shortcode($atts,$content)
+  static function cite_shortcode($atts,$content)
   {
 
       // we have a short code, so remember this for later
       self::$add_script = true;
 
-      // extract attributes as local vars
-      extract( shortcode_atts
-               ( 
-                array(
-                      "source" => false,
-                      ), $atts ) );
+      // explicit assignment of attributes
+      $defaults = array(
+          'source' => false,
+      );
+      $atts = shortcode_atts($defaults, $atts);
+      $source = $atts['source'];
 
       self::instantiate_bibliography();
 
-      // store citation in bibliography. Replace anchor. 
+      // store citation in bibliography. Replace anchor.
       $cite = new Citation();
-    
-      $cite->identifier=$content;
+      $cite->identifier = $content;
 
-      // TODO -- really need to fix this bit to recognise certain sources,
-      // in particular all the URL based ones. 
-      if( !$source ){
-          // let's try guessing
-          foreach( self::$id_matchers as $id_type => $regexps ){
-              foreach( $regexps as $regexp ){
-                  $i = preg_match( $regexp, $cite->identifier, $matches );
-                  if( $i > 0 ){
+      // source detection
+      if (!$source) {
+          foreach (self::$id_matchers as $id_type => $regexps) {
+              foreach ($regexps as $regexp) {
+                  $i = preg_match($regexp, $cite->identifier, $matches);
+                  if ($i > 0 && isset($matches[1])) {
                       $source = $id_type;
-                      $cite->identifier = $matches[ 1 ];
+                      $cite->identifier = $matches[1];
                       break 2;
-                 }
+                  }
               }
           }
       }
-      
-      // still not set? take default and hope.
-      if( !$source ){
-          $source = get_option("kcite_fallback_identifier");
+
+      // fallback if no source detected
+      if (!$source) {
+          $source = get_option('kcite_fallback_identifier');
       }
 
-      $cite->source=$source;
-      $cite->tagatts=$atts;
-      
-      return self::add_citation_to_bibliography( $cite );
+      $cite->source = $source;
+      $cite->tagatts = $atts;
+
+      return self::add_citation_to_bibliography($cite);
   }
 
 
-  function add_citation_to_bibliography( $cite ){
+  static function add_citation_to_bibliography( $cite ){
 
       if( !self::javascript_render_p() || is_feed() ){
           $citation = self::$bibliography->add_cite( $cite );
@@ -291,14 +288,14 @@ $content
       }
       else{
           $stubs = self::$stubs;
-          $url = "$stubs[$source]{$cite->identifier}";
+          $url = $stubs[$cite->source] . $cite->identifier;
           $in_text = "<a href=\"$url\">$url</a>";
           $anchor = self::$bibliography->add_cite( $cite )->anchor;
           return "<span class=\"kcite\" kcite-id=\"$anchor\">($in_text)</span>";
       }
   }
 
-  function bibliography_filter($content) {
+  static function bibliography_filter($content) {
       $bib_html = self::get_html_bibliography();
       // delete the bib -- or it will appear on subsequent posts
       self::$bibliography = null;
@@ -306,7 +303,7 @@ $content
       return $content . $bib_html;
   }
 
-  function cites_as_post_metadata( $postid, $bibliography=false ){
+  static function cites_as_post_metadata( $postid, $bibliography=false ){
 
       // last parameter means "single" -- that is get the single value
       // that is a serialized array. We have added multiple post-metadata
@@ -331,7 +328,7 @@ $content
       $cites_array = $bibliography->get_cites_array();
 
       // if the number of references have changed then so has the bibliography
-      if( count($cites_array) != $metadata_cites ){
+      if( count($cites_array) != count($metadata_cites) ){
           $cites_changed = true;
       }
       else{
@@ -355,7 +352,7 @@ $content
       return $metadata_cites;
   }
 
-  function get_html_bibliography(){
+  static function get_html_bibliography(){
       
       // check the bib has been set, otherwise there have been no cites. 
       if( !isset( self::$bibliography ) ){ 
@@ -406,7 +403,7 @@ EOT;
    * Array contains the citation objects as JSON translated into a PhP array.
    *
    */
-  private function build_bibliography($pub_array) {
+  private static function build_bibliography($pub_array) {
 
       $i = 1;
       $bib_string = "<h2>References</h2>
@@ -437,7 +434,7 @@ EOT;
               
               //sufficient missing to assume no publication retrieved...
               if (array_key_exists( "DOI", $pub ) && $pub['DOI']) {
-                  $bib_string .= "<li>$anchor<a href='http://dx.doi.org/".
+                  $bib_string .= "<li>$anchor<a href='https://doi.org/".
                       $pub['DOI']."'>DOI:".$pub['DOI'].
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
@@ -492,7 +489,7 @@ EOT;
               if (array_key_exists( "title", $pub) ){
                   $bib_string .= '"'.$pub['title'].'"';
               }
-              if ($pub['container-title']) {
+              if (array_key_exists("container-title", $pub) && $pub['container-title']) {
                   $bib_string .= ', <i>'.$pub['container-title'].'</i>';
               }
               if (array_key_exists("volume", $pub)){
@@ -517,7 +514,9 @@ EOT;
                       $bib_string .= ", " . $pub["issued"]["raw"] . ". ";
                   }
               }
-               $bib_string .= '<a href="' . $pub["URL"] . '">' . $pub["URL"] . '</a>';
+              if (array_key_exists("URL", $pub) && $pub["URL"]) {
+                  $bib_string .= '<a href="' . esc_url($pub["URL"]) . '">' . esc_html($pub["URL"]) . '</a>';
+              }
               $bib_string .= "
 
 
@@ -547,7 +546,7 @@ EOT;
    * Expands citation objects to include full details. 
    * This can be used to build the JSON. 
    */
-  private function resolve_metadata($cites) {
+  private static function resolve_metadata($cites) {
       
       $start_time = time();
       
@@ -649,7 +648,7 @@ EOT;
           if( $cite->source == "url" ){
               $cite = self::greycite_uri_lookup($cite);
               if($cite->resolved){
-                  $cite = self::get_greycite_metadata($cite, $fh);
+                  $cite = self::get_greycite_metadata($cite);
               }
           }
           
@@ -670,7 +669,7 @@ EOT;
       return $cites;
   }
  
-  private function transient_slug($cite)
+  private static function transient_slug($cite)
   {
       // slug has to be 45 chars or less
       return "kcite" . crc32( $cite->source . $cite->identifier );
@@ -682,18 +681,11 @@ EOT;
    * @param string $pub_doi A doi representing a reference
    * @return 
    */
-  private function dx_doi_lookup($cite) {
+  private static function dx_doi_lookup($cite) {
 
-      $url = "http://dx.doi.org/{$cite->identifier}";
+      $url = "http://doi.org/{$cite->identifier}";
       
       $params = array(
-                      // the order here is important, as both datacite and crossrefs content negotiation is broken. 
-                      // crossref only return the highest match, but do check other content
-                      // types. So, should return json. Datacite is broken, so only return the first
-                      // content type, which should be XML.
-                      
-                      // datacite now returns JSON, so this should be much simpler
-
                       'headers' => 
                       array( 'Accept' => 
                              "application/citeproc+json"),
@@ -750,7 +742,7 @@ EOT;
    * @param Citation the citation to resolve
    * @return null if DOI does not resolve, or raw pubmed XML
    */
-  private function pubmed_id_lookup($cite) {
+  private static function pubmed_id_lookup($cite) {
 
       $url = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?"
           . self::$entrez_slug . "&db=pubmed&retmode=xml&id="
@@ -786,14 +778,14 @@ EOT;
   }
 
 
-  private function arxiv_id_lookup($cite){
+  private static function arxiv_id_lookup($cite){
       
       //print( "fetching arxiv" );
       
       $url = "http://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:" 
           . $cite->identifier . "&metadataPrefix=arXiv";
       
-      $wpresponse = wp_remote_get( $url, $params );
+      $wpresponse = wp_remote_get( $url );
       
       //print( $url . "\n" );
       //print_r( $wpresponse );
@@ -818,10 +810,11 @@ EOT;
       
       return $cite;
   }
-  private function greycite_uri_lookup($cite){
+  private static function greycite_uri_lookup($cite){
 
       $url = "http://greycite.knowledgeblog.org/json?uri=" . $cite->identifier;
       
+      $params = array();
       if( get_option( "kcite_greycite_private" ) ){
           $params = array
               (
@@ -869,7 +862,7 @@ EOT;
    * @param Citation object
    * @return Citation with parsedXML now containing SimpleXMLElement object
    */
-  private function parse_xml($cite) {
+  private static function parse_xml($cite) {
       $cite->parsedXML = new SimpleXMLElement( $cite->resolution_source );
       return $cite;
   }
@@ -879,7 +872,7 @@ EOT;
    * @param array of Citation objects
    * @return php array ready for JSON encoding
    */
-  private function citation_combine($cites){
+  private static function citation_combine($cites){
       
       $citep = array();
       
@@ -931,7 +924,7 @@ EOT;
       return $citep;
   }
 
-  private function citation_generate_json( $cite )
+  private static function citation_generate_json( $cite )
   {
       
       $item = array();
@@ -999,7 +992,7 @@ EOT;
       return $cite;
   }
       
-  private function cache_json( $cite, $expiretime=-1 ){
+  private static function cache_json( $cite, $expiretime=-1 ){
       
       // cache if we need to 
       if( get_option( "kcite_cache_references" ) ){
@@ -1028,7 +1021,7 @@ EOT;
    * @param array of Citation objects
    * @return JSON encoded string for citeproc
    */
-  private function citation_combine_json( $cites ){
+  private static function citation_combine_json( $cites ){
       $citep = self::citation_combine( $cites );
 
       // crude hack --- http://bugs.php.net/bug.php?id=49366 PHP escapes all /
@@ -1046,7 +1039,7 @@ EOT;
    */
 
   // now misnamed as it works with datacite also
-   private function get_crossref_metadata($cite) {
+   private static function get_crossref_metadata($cite) {
        
        // we get back JSON from crossref. Unfortunately, we need to combine it
        // with other json from other sources, and fiddle with it a bit, so we need to
@@ -1070,7 +1063,7 @@ EOT;
     * @param string $article returns metadata object from SimpleXMLElement
     * @return metadata associative array
     */
-   private function get_pubmed_metadata($cite) {
+   private static function get_pubmed_metadata($cite) {
 
        $cite = self::parse_xml( $cite );
 
@@ -1136,7 +1129,7 @@ EOT;
   }
   
 
-   private function get_arxiv_metadata($cite){
+   private static function get_arxiv_metadata($cite){
        
        $cite = self::parse_xml( $cite );
 
@@ -1170,7 +1163,7 @@ EOT;
    }
 
 
-   private function get_greycite_metadata($cite){
+   private static function get_greycite_metadata($cite){
               
        // We get JSON back from greycite, but we need to fiddle, so decode it first
        $json_decoded = json_decode( $cite->resolution_source, true );
@@ -1210,7 +1203,7 @@ EOT;
   /**
    * Fetches the URI that the user requested to work out output format. 
    */
-  private function get_requested_uri() {
+  private static function get_requested_uri() {
     $requesturi = $_SERVER['REQUEST_URI'];
     preg_match('#\/(.*)\/bib\.(bib|ris|json)$#', $requesturi, $matches);
     //matches[1] is post (with extraneous paths maybe)
@@ -1225,7 +1218,7 @@ EOT;
   /**
    * add a link to settings on the plugin management page
    */ 
-  function refman_settings_link( $links, $file ) {
+  static function refman_settings_link( $links, $file ) {
     if ($file == 'kcite/kcite.php' && function_exists('admin_url')) {
         $settings_link = '<a href="' .admin_url('options-general.php?page=kcite.php').'">'. __('Settings') . '</a>';
         array_unshift($links, $settings_link);

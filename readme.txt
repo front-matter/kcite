@@ -3,8 +3,8 @@
 Contributors: philliplord, sjcockell, knowledgeblog, d_swan
 Tags: references, citations, doi, crossref, pubmed, bibliography, pmid, res-comms, scholar, academic, science
 Requires at least: 3.0
-Tested up to: 3.3.1
-Stable tag: 1.6.2
+Tested up to: 6.8
+Stable tag: 1.7.0
 
 A tool for producing citations and bibliographies in Wordpress posts.
 Developed for the Knowledgeblog project (http://knowledgeblog.org).
@@ -62,6 +62,16 @@ contact the authors, please email knowledgeblog@googlegroups.com.
 
 
 == Upgrade Notice ==
+
+= 1.7.1 =
+
+1. Included popular citation styles as current CSL style files. 
+1. Use latest citeproc.js
+1. Use https and doi.org instead of dx.doi.org 
+
+= 1.7.0 =
+
+Added compatibility with Wordpress 6.8 and PHP 8.4.
 
 = 1.6.3 =
 
