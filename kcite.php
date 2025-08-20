@@ -180,14 +180,11 @@ $content
       if( self::javascript_render_p() ){
       
           // load enqueue the scripts
-          //          wp_enqueue_script( "xmle4x", plugins_url( "kcite-citeproc/xmle4x.js", __FILE__ ), false, null, true );
-          wp_enqueue_script( "xmldom", plugins_url( "kcite-citeproc/xmldom.js",__FILE__  ), false, null, true );
           wp_enqueue_script( "citeproc", plugins_url( "kcite-citeproc/citeproc.js",__FILE__  ), false, null, true );
           wp_enqueue_script( "jquery" );
           wp_enqueue_script( "jquery-ui-core" );
           wp_enqueue_script( "jquery-ui-widget" );
           wp_enqueue_script( "jquery-ui-button");
-          //wp_enqueue_script( "jquery.cookie", plugins_url( "kcite-citeproc/jquery.cookie.js",__FILE__  ), false, null, true );
           wp_enqueue_script( "kcite_locale_style", 
                              plugins_url( "kcite-citeproc/kcite_locale_style.js", __FILE__  ), false, null, true );
           
@@ -196,10 +193,6 @@ $content
           
           wp_enqueue_script( "kcite", plugins_url( "kcite-citeproc/kcite.js",__FILE__  ), false, null, true );
           
-          // and print them or they won't be printed because the footers already done
-          // not sure that we need this any more
-          //wp_print_scripts( "xmle4x" );
-          wp_print_scripts( "xmldom" );
           wp_print_scripts( "citeproc" );
           wp_print_scripts( "jquery" );
           wp_print_scripts( "jquery-ui-core" );
