@@ -5,7 +5,7 @@
  * Compatible with WordPress 6.8+ and PHP 8.4+
  * 
  * @package Kcite
- * @version 1.7.34
+ * @version 1.7.35
  */
 
 // Prevent direct access

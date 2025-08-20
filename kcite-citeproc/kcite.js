@@ -2379,6 +2379,8 @@ jQuery(document).ready(function ($) {
         task_queue.push(function () {
           var cite_id = kcite_element.attr("kcite-id");
           var cite = sys.retrieveItem(cite_id);
+          console.log(cite);
+
           var bibindex = cite_id.split("-").pop();
 
           // the true here should mean that citeproc always
