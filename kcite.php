@@ -1044,11 +1044,11 @@ EOT;
        // decode it here, then re-encode it later.
        $json_decoded = json_decode( $cite->resolution_source, true );
 
-       // crossref returns both url and DOI. We don't need the latter, so delete it. 
+       // crossref returns both url and DOI. We don't need the former, so delete it.
        // The url has the wrong format: using the obsolete dx.doi.org proxy for Crossref
        // and the url the DOI redirects to for DataCite.
        $json_decoded["URL"] = 
-           "https://doi.org/" . $json_decoded["DOI"];
+           "https://doi.org/" . strtolower($json_decoded["DOI"]);
        unset( $json_decoded[ "DOI" ] );
 
        $json_decoded["source"] = $cite->source;
