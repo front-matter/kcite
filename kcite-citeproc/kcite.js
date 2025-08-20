@@ -2258,10 +2258,7 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
   return '<ol class="csl-bib-body">\n' + str + "</ol>";
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
-  console.log(this);
-  // Extract item ID for anchor
-  var item_id = this.item_id || "";
-  return '  <li class="csl-entry" id="' + item_id + '">' + str;
+  return '  <li class="csl-entry" id="' + this.system_id + '">' + str;
 };
 
 // kcite output is not hyperlinked or any such. These functions apply filters
@@ -2269,16 +2266,10 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
 kcite_style_cleaner["apa"] = function (bib_item) {
-  bib_item = bib_item.replace(
-    /<li class="csl-entry">/g,
-    '<li class="csl-entry" id="' + bib_item.id + '">'
-  );
   // URL linkify here - supports both http and https
   var httpPos = bib_item.lastIndexOf("http://");
   var httpsPos = bib_item.lastIndexOf("https://");
   var urlStart = Math.max(httpPos, httpsPos);
-
-  console.log(bib_item);
 
   if (urlStart === -1) {
     return bib_item;
