@@ -2257,6 +2257,9 @@ CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
   return '<ol class="csl-bib-body">\n' + str + "</ol>";
 };
+CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
+  return '  <li class="csl-entry">' + str;
+};
 
 // kcite output is not hyperlinked or any such. These functions apply filters
 // to make it better. As these are style specific they don't need to be
@@ -2267,6 +2270,8 @@ kcite_style_cleaner["apa"] = function (bib_item) {
   var httpPos = bib_item.lastIndexOf("http://");
   var httpsPos = bib_item.lastIndexOf("https://");
   var urlStart = Math.max(httpPos, httpsPos);
+
+  console.log(bib_item);
 
   if (urlStart === -1) {
     return bib_item;
@@ -2447,12 +2452,6 @@ jQuery(document).ready(function ($) {
         } else {
           bib_string = bib_string + item;
         }
-        bib_string =
-          '<li class="csl-entry" id="' +
-          (index + 1).toString() +
-          '">' +
-          bib_string +
-          "</li>";
       });
 
       if (section_contains_timeout) {
