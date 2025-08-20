@@ -601,9 +601,11 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
   return '<ol class="csl-bib-body">\n' + str + "</ol>";
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
-  return (
-    '  <li class="csl-entry">' + '<a name="' + this.item_id + '"></a>' + str
-  );
+  var insert = "";
+  if (state.sys.embedBibliographyEntry) {
+    insert = state.sys.embedBibliographyEntry(this.item_id);
+  }
+  return '  <li class="csl-entry">' + '<a name="' + insert + '"></a>' + str;
 };
 
 // kcite output is not hyperlinked or any such. These functions apply filters

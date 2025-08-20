@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.22
+   Version: 1.7.23
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -314,25 +314,32 @@ $content
 
   static function add_citation_to_bibliography( $cite ){
 
-      if( !self::javascript_render_p() || is_feed() ){
-          $citation = self::$bibliography->add_cite( $cite );
-          $anchor = $citation->anchor;
-          $bibindex = $citation->bibindex;
-          return 
-              "<span id=\"cite_$anchor\" name=\"citation\">" .
-              "<a href=\"#$anchor\">[$bibindex]</a></span>";
-      }
-      else{
-          $stubs = self::$stubs;
-          if (isset($stubs[$cite->source])) {
-              $url = $stubs[$cite->source] . $cite->identifier;
-              $in_text = "<a href=\"$url\">$url</a>";
-          } else {
-              $in_text = $cite->identifier;
-          }
-          $anchor = self::$bibliography->add_cite( $cite )->anchor;
-          return "<span class=\"kcite\" kcite-id=\"$anchor\">($in_text)</span>";
-      }
+      $citation = self::$bibliography->add_cite( $cite );
+      $anchor = $citation->anchor;
+      $bibindex = $citation->bibindex;
+      return 
+          "<span id=\"cite_$anchor\" name=\"citation\">" .
+          "<a href=\"#$anchor\">[$bibindex]</a></span>";
+            
+    //   if( !self::javascript_render_p() || is_feed() ){
+    //       $citation = self::$bibliography->add_cite( $cite );
+    //       $anchor = $citation->anchor;
+    //       $bibindex = $citation->bibindex;
+    //       return 
+    //           "<span id=\"cite_$anchor\" name=\"citation\">" .
+    //           "<a href=\"#$anchor\">[$bibindex]</a></span>";
+    //   }
+    //   else{
+    //       $stubs = self::$stubs;
+    //       if (isset($stubs[$cite->source])) {
+    //           $url = $stubs[$cite->source] . $cite->identifier;
+    //           $in_text = "<a href=\"$url\">$url</a>";
+    //       } else {
+    //           $in_text = $cite->identifier;
+    //       }
+    //       $anchor = self::$bibliography->add_cite( $cite )->anchor;
+    //       return "<span class=\"kcite\" kcite-id=\"$anchor\">($in_text)</span>";
+    //   }
   }
 
   static function bibliography_filter($content) {
