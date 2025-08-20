@@ -596,17 +596,20 @@ if (typeof window !== "undefined") {
 // ====================================================================
 
 // modify the HTML output format so that the bibliography hyperlinks
-// CSL.Output.Formats.kcite = CSL.Output.Formats.html;
-// CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
-//   return (
-//     '  <div class="csl-entry">' +
-//     '<a name="' +
-//     this.item_id +
-//     '"></a>' +
-//     str +
-//     "\n"
-//   );
-// };
+CSL.Output.Formats.kcite = CSL.Output.Formats.html;
+CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
+  return '<ol class="csl-bib-body">\n' + str + "</ol>";
+};
+CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
+  return (
+    '  <li class="csl-entry">' +
+    '<a name="' +
+    this.item_id +
+    '"></a>' +
+    str +
+    "\n</li>"
+  );
+};
 
 // kcite output is not hyperlinked or any such. These functions apply filters
 // to make it better. As these are style specific they don't need to be
@@ -720,7 +723,7 @@ jQuery(document).ready(function ($) {
     var citeproc = new CSL.Engine(sys, style);
 
     // set the modified output format
-    // citeproc.setOutputFormat("kcite");
+    citeproc.setOutputFormat("kcite");
 
     // store all the ids that we are going to use. We register these with
     // citeproc, which should mean that references which would otherwise
