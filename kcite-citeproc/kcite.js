@@ -34,7 +34,7 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // to make it better. As these are style specific they don't need to be
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
-kcite_style_cleaner["chicago-author-date"] = function (bib_item) {
+kcite_style_cleaner["apa"] = function (bib_item) {
   // URL linkify here
   var http = bib_item.lastIndexOf("http");
   var url = bib_item.substring(http, bib_item.lastIndexOf("."));
