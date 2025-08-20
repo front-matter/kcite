@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.28
+   Version: 1.7.29
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -473,19 +473,19 @@ EOT;
               
               //sufficient missing to assume no publication retrieved...
               if (array_key_exists( "DOI", $pub ) && $pub['DOI']) {
-                  $bib_string .= "<li>$anchor<a href='https://doi.org/".
+                  $bib_string .= "<li id='$anchor'><a href='https://doi.org/".
                       $pub['DOI']."'>DOI:".$pub['DOI'].
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
               if (array_key_exists( "PMID", $pub ) && $pub['PMID']) {
-                  $bib_string .= "<li>$anchor<a href='http://www.ncbi.nlm.nih.gov/pubmed/"
+                  $bib_string .= "<li id='$anchor'><a href='http://www.ncbi.nlm.nih.gov/pubmed/"
                       .$pub['PMID']."'>PMID:".$pub['DOI'].
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
           }
           else {
-              
-              $bib_string .= "<li>$anchor
+
+              $bib_string .= "<li id='$anchor'>
 ";
 
               //
