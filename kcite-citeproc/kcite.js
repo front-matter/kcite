@@ -44,18 +44,7 @@ kcite_style_cleaner["apa"] = function (bib_item) {
     return bib_item;
   }
 
-  // Find the end of the URL - look for common delimiters
-  var urlEndMarkers = [" ", ".", "</", "\n", "\t"];
-  var urlEnd = bib_item.length;
-
-  for (var i = 0; i < urlEndMarkers.length; i++) {
-    var markerPos = bib_item.indexOf(urlEndMarkers[i], urlStart);
-    if (markerPos !== -1 && markerPos < urlEnd) {
-      urlEnd = markerPos;
-    }
-  }
-
-  var url = bib_item.substring(urlStart, urlEnd);
+  var url = bib_item.substring(urlStart, bib_item.length);
 
   // Validate that we have a reasonable URL
   if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
@@ -64,13 +53,7 @@ kcite_style_cleaner["apa"] = function (bib_item) {
 
   // Replace the URL with a clickable link
   return (
-    bib_item.substring(0, urlStart) +
-    '<a href="' +
-    url +
-    '">' +
-    url +
-    "</a>" +
-    bib_item.substring(urlEnd)
+    bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
   );
 };
 
