@@ -48,7 +48,7 @@ function loadLocaleFromFile(localeName, filePath) {
   });
 }
 
-function loadLocaleSync(localeName, filePath) {
+async function loadLocaleAsync(localeName, filePath) {
   // Try to construct the full path relative to the current script location
   var scriptPath = "";
   var scripts = document.getElementsByTagName("script");
@@ -64,16 +64,17 @@ function loadLocaleSync(localeName, filePath) {
 
   var fullPath = scriptPath + filePath;
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", fullPath, false); // Synchronous request
   try {
-    xhr.send();
-    if (xhr.status === 200) {
-      kcite_locales[localeName] = xhr.responseText;
+    const response = await fetch(fullPath);
+    if (response.ok) {
+      const localeContent = await response.text();
+      kcite_locales[localeName] = localeContent;
       console.log(`Successfully loaded locale: ${localeName} from ${fullPath}`);
-      return xhr.responseText;
+      return localeContent;
     } else {
-      console.error(`Failed to load locale file ${fullPath}: ${xhr.status}`);
+      console.error(
+        `Failed to load locale file ${fullPath}: ${response.status}`
+      );
       return null;
     }
   } catch (error) {
@@ -84,14 +85,21 @@ function loadLocaleSync(localeName, filePath) {
 
 // Function to load multiple locale files
 async function loadAllLocales() {
-  const localesToLoad = ["de-DE", "fr-FR", "es-ES", "en-US"];
+  const localesToLoad = [
+    "de-DE",
+    "en-GB",
+    "en-US",
+    "es-ES",
+    "fr-FR",
+    "it-IT",
+    "ja-JP",
+    "pt-BR",
+    "zh-CN",
+  ];
 
   for (const localeName of localesToLoad) {
     try {
-      await loadLocaleFromFile(
-        localeName,
-        "locale_" + localeName.toLowerCase() + ".xml"
-      );
+      await loadLocaleFromFile(localeName, "locales_" + localeName + ".xml");
       console.log(`Loaded locale: ${localeName}`);
     } catch (error) {
       console.warn(`Failed to load locale ${localeName}:`, error);
@@ -110,15 +118,15 @@ function isLocaleAvailable(localeName) {
 }
 
 // Function to set the current locale
-function setCurrentLocale(localeName) {
+async function setCurrentLocale(localeName) {
   if (isLocaleAvailable(localeName)) {
     kcite_default_locale = localeName;
     return true;
   }
 
   // Try to load the locale if not available
-  var fileName = "locale_" + localeName.toLowerCase() + ".xml";
-  var locale = loadLocaleSync(localeName, fileName);
+  var fileName = "locales_" + localeName + ".xml";
+  var locale = await loadLocaleAsync(localeName, fileName);
   if (locale) {
     kcite_default_locale = localeName;
     return true;
@@ -136,7 +144,7 @@ function getCurrentLocale() {
 }
 
 // Enhanced locale retrieval function that can load locales on demand
-function getLocale(localeName) {
+async function getLocale(localeName) {
   // If no locale specified, use current locale
   if (!localeName) {
     localeName = getCurrentLocale();
@@ -147,17 +155,17 @@ function getLocale(localeName) {
     return kcite_locales[localeName];
   }
 
-  // Try to load it synchronously if not available
-  var fileName = "locale_" + localeName.toLowerCase() + ".xml";
-  var locale = loadLocaleSync(localeName, fileName);
+  // Try to load it asynchronously if not available
+  var fileName = "locales_" + localeName + ".xml";
+  var locale = await loadLocaleAsync(localeName, fileName);
 
   return (
     locale || kcite_locales[kcite_default_locale] || kcite_locales["en-US"]
   ); // Fallback to default locale
 }
 
-// Function to load CSL style synchronously (for immediate use)
-function loadCSLStyleSync(styleName, filePath) {
+// Function to load CSL style asynchronously (for immediate use)
+async function loadCSLStyleAsync(styleName, filePath) {
   // Try to construct the full path relative to the current script location
   var scriptPath = "";
   var scripts = document.getElementsByTagName("script");
@@ -173,16 +181,15 @@ function loadCSLStyleSync(styleName, filePath) {
 
   var fullPath = scriptPath + filePath;
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("GET", fullPath, false); // Synchronous request
   try {
-    xhr.send();
-    if (xhr.status === 200) {
-      kcite_styles[styleName] = xhr.responseText;
+    const response = await fetch(fullPath);
+    if (response.ok) {
+      const styleContent = await response.text();
+      kcite_styles[styleName] = styleContent;
       console.log(`Successfully loaded style: ${styleName} from ${fullPath}`);
-      return xhr.responseText;
+      return styleContent;
     } else {
-      console.error(`Failed to load CSL file ${fullPath}: ${xhr.status}`);
+      console.error(`Failed to load CSL file ${fullPath}: ${response.status}`);
       return null;
     }
   } catch (error) {
@@ -221,7 +228,7 @@ function isStyleAvailable(styleName) {
 }
 
 // Function to set the current style
-function setCurrentStyle(styleName) {
+async function setCurrentStyle(styleName) {
   if (isStyleAvailable(styleName)) {
     kcite_default_style = styleName;
     return true;
@@ -229,7 +236,7 @@ function setCurrentStyle(styleName) {
 
   // Try to load the style if not available
   var fileName = styleName + ".csl";
-  var style = loadCSLStyleSync(styleName, fileName);
+  var style = await loadCSLStyleAsync(styleName, fileName);
   if (style) {
     kcite_default_style = styleName;
     return true;
@@ -245,7 +252,7 @@ function getCurrentStyle() {
 }
 
 // Enhanced style retrieval function that can load styles on demand
-function getStyle(styleName) {
+async function getStyle(styleName) {
   // If no style specified, use current style
   if (!styleName) {
     styleName = getCurrentStyle();
@@ -256,9 +263,9 @@ function getStyle(styleName) {
     return kcite_styles[styleName];
   }
 
-  // Try to load it synchronously if not available
+  // Try to load it asynchronously if not available
   var fileName = styleName + ".csl";
-  var style = loadCSLStyleSync(styleName, fileName);
+  var style = await loadCSLStyleAsync(styleName, fileName);
 
   return style || kcite_styles[kcite_default_style] || kcite_styles["apa"]; // Fallback to default style
 }
