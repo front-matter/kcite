@@ -5,7 +5,7 @@
  * Compatible with WordPress 6.8+ and PHP 8.4+
  * 
  * @package Kcite
- * @version 1.7.7
+ * @version 1.7.8
  */
 
 // Prevent direct access
@@ -75,7 +75,7 @@ class Kcite_Admin {
         
         $this->table_head($nonce);
 
-        // Sichere Verarbeitung von POST-Daten
+        // Safe POST data handling
         $is_post = ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST';
         $nonce_valid = false;
         
@@ -268,7 +268,7 @@ EOT;
      * Save admin options
      */
     public function admin_save(): void {
-        // Sichere boolesche Speicherung mit expliziter Typkonvertierung
+        // Safe boolean storage with explicit type casting
         update_option('kcite_citation_render_client', isset($_POST['kcite_citation_render_client']));
 
         if (isset($_POST['kcite_citation_timeout'])) {
