@@ -612,49 +612,49 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // to make it better. As these are style specific they don't need to be
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
-kcite_style_cleaner["apa"] = function (bib_item) {
-  // URL linkify here - supports both http and https
-  var httpPos = bib_item.lastIndexOf("http://");
-  var httpsPos = bib_item.lastIndexOf("https://");
-  var urlStart = Math.max(httpPos, httpsPos);
+// kcite_style_cleaner["apa"] = function (bib_item) {
+//   // URL linkify here - supports both http and https
+//   var httpPos = bib_item.lastIndexOf("http://");
+//   var httpsPos = bib_item.lastIndexOf("https://");
+//   var urlStart = Math.max(httpPos, httpsPos);
 
-  if (urlStart === -1) {
-    return bib_item;
-  }
+//   if (urlStart === -1) {
+//     return bib_item;
+//   }
 
-  var url = bib_item.substring(urlStart, bib_item.length);
+//   var url = bib_item.substring(urlStart, bib_item.length);
 
-  // Validate that we have a reasonable URL
-  if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
-    return bib_item;
-  }
+//   // Validate that we have a reasonable URL
+//   if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
+//     return bib_item;
+//   }
 
-  // Replace the URL with a clickable link
-  return (
-    bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
-  );
-};
+//   // Replace the URL with a clickable link
+//   return (
+//     bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
+//   );
+// };
 
-kcite_style_cleaner["nature"] = function (bib_item) {
-  //return bib_item;
-  var start_url = bib_item.lastIndexOf("&#60;");
-  var end_url = bib_item.lastIndexOf("&#62;");
-  if (start_url == -1 || end_url == -1) {
-    return bib_item;
-  }
-  // skip entity
-  var start_url = start_url + 5;
-  var url = bib_item.substring(start_url, end_url);
-  return (
-    bib_item.substring(0, start_url) +
-    '<a href="' +
-    url +
-    '">' +
-    url +
-    "</a>" +
-    bib_item.substring(end_url)
-  );
-};
+// kcite_style_cleaner["nature"] = function (bib_item) {
+//   //return bib_item;
+//   var start_url = bib_item.lastIndexOf("&#60;");
+//   var end_url = bib_item.lastIndexOf("&#62;");
+//   if (start_url == -1 || end_url == -1) {
+//     return bib_item;
+//   }
+//   // skip entity
+//   var start_url = start_url + 5;
+//   var url = bib_item.substring(start_url, end_url);
+//   return (
+//     bib_item.substring(0, start_url) +
+//     '<a href="' +
+//     url +
+//     '">' +
+//     url +
+//     "</a>" +
+//     bib_item.substring(end_url)
+//   );
+// };
 
 jQuery.noConflict();
 jQuery(document).ready(function ($) {

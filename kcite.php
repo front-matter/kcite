@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.17
+   Version: 1.7.18
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -665,7 +665,7 @@ EOT;
               $cite = self::doi_lookup($cite);
 
               if($cite->resolved && $cite->resolved_from=="doi") {
-                  $cite = self::get_crossref_metadata($cite);
+                  $cite = self::get_doi_metadata($cite);
               }
           }
           
@@ -1002,7 +1002,8 @@ EOT;
           $item[ "DOI" ] = $cite->reported_doi;
       }
       
-      $item[ "type" ] = "article-journal";
+      // $item[ "type" ] = "article-journal";
+      $item[ "type" ] = $cite->type;
       
       if( $cite->url ){
           $item["URL"] = $cite->url;
@@ -1062,8 +1063,7 @@ EOT;
    * @return Citation with metadata extracted
    */
 
-  // now misnamed as it works with datacite also
-   private static function get_crossref_metadata($cite) {
+   private static function get_doi_metadata($cite) {
        
        // we get back JSON from crossref. Unfortunately, we need to combine it
        // with other json from other sources, and fiddle with it a bit, so we need to
@@ -1373,6 +1373,7 @@ class Citation{
     public $reported_doi;
     public $resource;
     public $issue;
+    public $type;
     public $url;
 
     // internal anchor to be used for linking
