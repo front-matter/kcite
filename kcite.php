@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.11
+   Version: 1.7.12
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -11,6 +11,7 @@
    Copyright (c) 2010-13. Simon Cockell (s.j.cockell@newcastle.ac.uk)
    Phillip Lord (phillip.lord@newcastle.ac.uk)
    Newcastle University. 
+   Copyright (c) 2025. Front Matter (info@front-matter.io)
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -189,6 +190,10 @@ $content
           //wp_enqueue_script( "jquery.cookie", plugins_url( "kcite-citeproc/jquery.cookie.js",__FILE__  ), false, null, true );
           wp_enqueue_script( "kcite_locale_style", 
                              plugins_url( "kcite-citeproc/kcite_locale_style.js", __FILE__  ), false, null, true );
+          
+          // Output WordPress settings as JavaScript variables
+          self::output_javascript_settings();
+          
           wp_enqueue_script( "kcite", plugins_url( "kcite-citeproc/kcite.js",__FILE__  ), false, null, true );
           
           // and print them or they won't be printed because the footers already done
@@ -204,6 +209,28 @@ $content
           wp_print_scripts( "kcite_locale_style" );
           wp_print_scripts( "kcite" );
       }
+  }
+
+  /**
+   * Output JavaScript settings based on WordPress options
+   */
+  static function output_javascript_settings() {
+      $default_style = get_option('kcite_default_style', 'apa');
+      $default_locale = get_option('kcite_default_locale', 'en-US');
+      
+      // Sanitize values
+      $default_style = esc_js($default_style);
+      $default_locale = esc_js($default_locale);
+      
+      echo "<script type='text/javascript'>\n";
+      echo "// KCite WordPress Settings\n";
+      echo "if (typeof kcite_default_style !== 'undefined') {\n";
+      echo "    kcite_default_style = '{$default_style}';\n";
+      echo "}\n";
+      echo "if (typeof kcite_default_locale !== 'undefined') {\n";
+      echo "    kcite_default_locale = '{$default_locale}';\n";
+      echo "}\n";
+      echo "</script>\n";
   }
 
   static function instantiate_bibliography(){

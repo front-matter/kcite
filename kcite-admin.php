@@ -5,7 +5,7 @@
  * Compatible with WordPress 6.8+ and PHP 8.4+
  * 
  * @package Kcite
- * @version 1.7.11
+ * @version 1.7.12
  */
 
 // Prevent direct access
@@ -194,9 +194,10 @@ class Kcite_Admin {
         );
 
         $cache_references = get_option('kcite_cache_references') ? 'checked="checked"' : '';
-        $this->admin_table_row(
+                $this->admin_table_row(
             __('Cache References', 'kcite'),
             esc_html__(
+                'Cache references to improve performance. ' .
                 'Deselect for debugging purposes. This will have a significant impact on ' .
                 'performance where you have many references',
                 'kcite'
@@ -207,7 +208,90 @@ class Kcite_Admin {
             )
         );
 
+        // Citation Style Language (CSL) Settings
+        $this->render_csl_settings();
+
         $this->table_foot();
+    }
+
+    /**
+     * Render CSL (Citation Style Language) settings
+     */
+    public function render_csl_settings(): void {
+        // Available citation styles
+        $available_styles = array(
+            'apa' => __('APA', 'kcite'),
+            'american-chemical-society' => __('American Chemical Society (ACS)', 'kcite'),
+            'chicago-author-date' => __('Chicago Manual of Style (Author-Date)', 'kcite'),
+            'harvard-cite-them-right' => __('Harvard (Cite Them Right)', 'kcite'),
+            'ieee' => __('IEEE', 'kcite'),
+            'modern-language-association' => __('Modern Language Association (MLA)', 'kcite'),
+            'nature' => __('Nature', 'kcite'),
+            'vancouver' => __('Vancouver', 'kcite')
+        );
+
+        // Available locales
+        $available_locales = array(
+            'en-US' => __('English (US)', 'kcite'),
+            'en-GB' => __('English (UK)', 'kcite'),
+            'de-DE' => __('German (Germany)', 'kcite'),
+            'fr-FR' => __('French (France)', 'kcite'),
+            'es-ES' => __('Spanish (Spain)', 'kcite'),
+            'it-IT' => __('Italian (Italy)', 'kcite'),
+            'pt-BR' => __('Portuguese (Brazil)', 'kcite'),
+            'zh-CN' => __('Chinese (Simplified)', 'kcite'),
+            'ja-JP' => __('Japanese', 'kcite')
+        );
+
+        // Get current settings
+        $default_style = get_option('kcite_default_style', 'apa');
+        $default_locale = get_option('kcite_default_locale', 'en-US');
+
+        // Render default citation style setting
+        $style_select_html = '<select name="kcite_default_style">';
+        foreach ($available_styles as $value => $label) {
+            $selected = selected($default_style, $value, false);
+            $style_select_html .= sprintf(
+                '<option value="%s" %s>%s</option>',
+                esc_attr($value),
+                $selected,
+                esc_html($label)
+            );
+        }
+        $style_select_html .= '</select>';
+
+        $this->admin_table_row(
+            __('Default Citation Style', 'kcite'),
+            esc_html__(
+                'Choose the default citation style to use when rendering citations. ' .
+                'This can be overridden on a per-citation basis.',
+                'kcite'
+            ),
+            $style_select_html
+        );
+
+        // Render default locale setting
+        $locale_select_html = '<select name="kcite_default_locale">';
+        foreach ($available_locales as $value => $label) {
+            $selected = selected($default_locale, $value, false);
+            $locale_select_html .= sprintf(
+                '<option value="%s" %s>%s</option>',
+                esc_attr($value),
+                $selected,
+                esc_html($label)
+            );
+        }
+        $locale_select_html .= '</select>';
+
+        $this->admin_table_row(
+            __('Default Language/Locale', 'kcite'),
+            esc_html__(
+                'Choose the default language and locale for citation formatting. ' .
+                'This affects date formats, quotation marks, and localized terms.',
+                'kcite'
+            ),
+            $locale_select_html
+        );
     }
 
     /**
@@ -295,6 +379,43 @@ EOT;
         }
 
         update_option('kcite_cache_references', isset($_POST['kcite_cache_references']));
+
+        // Save CSL settings
+        $this->save_csl_settings();
+    }
+
+    /**
+     * Save CSL (Citation Style Language) settings
+     */
+    public function save_csl_settings(): void {
+        // Available styles for validation
+        $available_styles = array(
+            'apa', 'american-chemical-society', 'chicago-author-date',
+            'harvard-cite-them-right', 'ieee', 'modern-language-association',
+            'nature', 'vancouver'
+        );
+
+        // Available locales for validation
+        $available_locales = array(
+            'en-US', 'en-GB', 'de-DE', 'fr-FR', 'es-ES',
+            'it-IT', 'pt-BR', 'zh-CN', 'ja-JP'
+        );
+
+        // Save default citation style
+        if (isset($_POST['kcite_default_style'])) {
+            $style = sanitize_text_field(wp_unslash($_POST['kcite_default_style']));
+            if (in_array($style, $available_styles, true)) {
+                update_option('kcite_default_style', $style);
+            }
+        }
+
+        // Save default locale
+        if (isset($_POST['kcite_default_locale'])) {
+            $locale = sanitize_text_field(wp_unslash($_POST['kcite_default_locale']));
+            if (in_array($locale, $available_locales, true)) {
+                update_option('kcite_default_locale', $locale);
+            }
+        }
     }
 }
 

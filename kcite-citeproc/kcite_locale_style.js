@@ -6,6 +6,10 @@ var kcite_styles = {
   apa: null, // Will be loaded on demand
 };
 
+// Default settings - can be overridden by WordPress settings
+var kcite_default_style = "apa";
+var kcite_default_locale = "en-US";
+
 // Locale loading functions
 function loadLocaleFromFile(localeName, filePath) {
   return new Promise((resolve, reject) => {
@@ -332,6 +336,3 @@ if (typeof window !== "undefined") {
     }
   });
 }
-
-var kcite_default_style = "apa";
-var kcite_default_locale = "en-US";
