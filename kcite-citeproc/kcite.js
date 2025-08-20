@@ -35,15 +35,42 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
 kcite_style_cleaner["apa"] = function (bib_item) {
-  // URL linkify here
-  var http = bib_item.lastIndexOf("http");
-  var url = bib_item.substring(http, bib_item.lastIndexOf("."));
-  if (http == -1) {
+  // URL linkify here - supports both http and https
+  var httpPos = bib_item.lastIndexOf("http://");
+  var httpsPos = bib_item.lastIndexOf("https://");
+  var urlStart = Math.max(httpPos, httpsPos);
+
+  if (urlStart === -1) {
     return bib_item;
   }
-  // we chopped off the close div, so need to add it back
+
+  // Find the end of the URL - look for common delimiters
+  var urlEndMarkers = [" ", ".", "</", "\n", "\t"];
+  var urlEnd = bib_item.length;
+
+  for (var i = 0; i < urlEndMarkers.length; i++) {
+    var markerPos = bib_item.indexOf(urlEndMarkers[i], urlStart);
+    if (markerPos !== -1 && markerPos < urlEnd) {
+      urlEnd = markerPos;
+    }
+  }
+
+  var url = bib_item.substring(urlStart, urlEnd);
+
+  // Validate that we have a reasonable URL
+  if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
+    return bib_item;
+  }
+
+  // Replace the URL with a clickable link
   return (
-    bib_item.substring(0, http) + '<a href="' + url + '">' + url + "</a>.</div>"
+    bib_item.substring(0, urlStart) +
+    '<a href="' +
+    url +
+    '">' +
+    url +
+    "</a>" +
+    bib_item.substring(urlEnd)
   );
 };
 
