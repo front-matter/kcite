@@ -598,15 +598,15 @@ if (typeof window !== "undefined") {
 // modify the HTML output format so that the bibliography hyperlinks
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
+  console.log("CSL @bibliography/body state:", state);
   return '<ol class="csl-bib-body">\n' + str + "</ol>";
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   // Log state object to console for debugging
   console.log("CSL @bibliography/entry state:", state);
-  console.log("this.item_id:", this.item_id);
 
   // Use item_id directly for anchor name
-  var anchorName = this.item_id || "";
+  var anchorName = "ITEM-44-1" || "";
 
   return '  <li class="csl-entry">' + '<a name="' + anchorName + '"></a>' + str;
 };
