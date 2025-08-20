@@ -179,19 +179,31 @@ $content
       
       if( self::javascript_render_p() ){
       
-          // load enqueue the scripts
-          wp_enqueue_script( "citeproc", plugins_url( "kcite-citeproc/citeproc.js",__FILE__  ), false, null, true );
+          // load enqueue the scripts with proper dependencies
           wp_enqueue_script( "jquery" );
-          wp_enqueue_script( "jquery-ui-core" );
-          wp_enqueue_script( "jquery-ui-widget" );
-          wp_enqueue_script( "jquery-ui-button");
+          wp_enqueue_script( "jquery-ui-core", false, array("jquery") );
+          wp_enqueue_script( "jquery-ui-widget", false, array("jquery", "jquery-ui-core") );
+          wp_enqueue_script( "jquery-ui-button", false, array("jquery", "jquery-ui-core", "jquery-ui-widget"));
+          
+          // Register and enqueue jQuery Cookie plugin (required for UI state persistence)
+          wp_enqueue_script( "jquery.cookie", 
+                             "https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js", 
+                             array("jquery"), "1.4.1", true );
+          
+          // CSL processing engine
+          wp_enqueue_script( "citeproc", plugins_url( "kcite-citeproc/citeproc.js",__FILE__  ), false, null, true );
+          
+          // Locale and style management (depends on citeproc)
           wp_enqueue_script( "kcite_locale_style", 
-                             plugins_url( "kcite-citeproc/kcite_locale_style.js", __FILE__  ), false, null, true );
+                             plugins_url( "kcite-citeproc/kcite_locale_style.js", __FILE__  ), 
+                             array("citeproc"), null, true );
           
           // Output WordPress settings as JavaScript variables
           self::output_javascript_settings();
           
-          wp_enqueue_script( "kcite", plugins_url( "kcite-citeproc/kcite.js",__FILE__  ), false, null, true );
+          // Main KCite functionality (depends on all above)
+          wp_enqueue_script( "kcite", plugins_url( "kcite-citeproc/kcite.js",__FILE__  ), 
+                             array("jquery", "jquery-ui-button", "jquery.cookie", "citeproc", "kcite_locale_style"), null, true );
           
           wp_print_scripts( "citeproc" );
           wp_print_scripts( "jquery" );

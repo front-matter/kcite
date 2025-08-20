@@ -6,9 +6,15 @@ var kcite_styles = {
   apa: null, // Will be loaded on demand
 };
 
-// Default settings - can be overridden by WordPress settings
+// Default settings - will be overridden by WordPress settings if available
 var kcite_default_style = "apa";
 var kcite_default_locale = "en-US";
+
+// Load WordPress settings if available
+if (typeof window.kciteSettings !== 'undefined') {
+  kcite_default_style = window.kciteSettings.defaultStyle || kcite_default_style;
+  kcite_default_locale = window.kciteSettings.defaultLocale || kcite_default_locale;
+}
 
 // Helper function to get script path
 function getScriptPath() {
