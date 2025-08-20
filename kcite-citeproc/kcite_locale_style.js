@@ -10,46 +10,8 @@ var kcite_styles = {
 var kcite_default_style = "apa";
 var kcite_default_locale = "en-US";
 
-// Locale loading functions
-function loadLocaleFromFile(localeName, filePath) {
-  return new Promise((resolve, reject) => {
-    // Try to construct the full path relative to the current script location
-    var scriptPath = "";
-    var scripts = document.getElementsByTagName("script");
-    for (var i = 0; i < scripts.length; i++) {
-      if (scripts[i].src && scripts[i].src.indexOf("kcite") !== -1) {
-        scriptPath = scripts[i].src.substring(
-          0,
-          scripts[i].src.lastIndexOf("/") + 1
-        );
-        break;
-      }
-    }
-
-    var fullPath = scriptPath + filePath;
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", fullPath, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          // Add the loaded locale to kcite_locales
-          kcite_locales[localeName] = xhr.responseText;
-          console.log(
-            `Successfully loaded locale: ${localeName} from ${fullPath}`
-          );
-          resolve(xhr.responseText);
-        } else {
-          reject(new Error(`Failed to load locale file: ${xhr.status}`));
-        }
-      }
-    };
-    xhr.send();
-  });
-}
-
-async function loadLocaleAsync(localeName, filePath) {
-  // Try to construct the full path relative to the current script location
+// Helper function to get script path
+function getScriptPath() {
   var scriptPath = "";
   var scripts = document.getElementsByTagName("script");
   for (var i = 0; i < scripts.length; i++) {
@@ -61,8 +23,12 @@ async function loadLocaleAsync(localeName, filePath) {
       break;
     }
   }
+  return scriptPath;
+}
 
-  var fullPath = scriptPath + filePath;
+// Locale loading functions
+async function loadLocaleFromFile(localeName, filePath) {
+  var fullPath = getScriptPath() + filePath;
 
   try {
     const response = await fetch(fullPath);
@@ -72,14 +38,11 @@ async function loadLocaleAsync(localeName, filePath) {
       console.log(`Successfully loaded locale: ${localeName} from ${fullPath}`);
       return localeContent;
     } else {
-      console.error(
-        `Failed to load locale file ${fullPath}: ${response.status}`
-      );
-      return null;
+      throw new Error(`Failed to load locale file: ${response.status}`);
     }
   } catch (error) {
     console.error(`Error loading locale file ${fullPath}:`, error);
-    return null;
+    throw error;
   }
 }
 
@@ -99,7 +62,7 @@ async function loadAllLocales() {
 
   for (const localeName of localesToLoad) {
     try {
-      await loadLocaleFromFile(localeName, "locales_" + localeName + ".xml");
+      await loadLocaleFromFile(localeName, "locales-" + localeName + ".xml");
       console.log(`Loaded locale: ${localeName}`);
     } catch (error) {
       console.warn(`Failed to load locale ${localeName}:`, error);
@@ -125,17 +88,17 @@ async function setCurrentLocale(localeName) {
   }
 
   // Try to load the locale if not available
-  var fileName = "locales_" + localeName + ".xml";
-  var locale = await loadLocaleAsync(localeName, fileName);
-  if (locale) {
+  var fileName = "locales-" + localeName + ".xml";
+  try {
+    var locale = await loadLocaleFromFile(localeName, fileName);
     kcite_default_locale = localeName;
     return true;
+  } catch (error) {
+    console.warn(
+      `Locale "${localeName}" is not available and could not be loaded`
+    );
+    return false;
   }
-
-  console.warn(
-    `Locale "${localeName}" is not available and could not be loaded`
-  );
-  return false;
 }
 
 // Function to get the current locale
@@ -156,45 +119,13 @@ async function getLocale(localeName) {
   }
 
   // Try to load it asynchronously if not available
-  var fileName = "locales_" + localeName + ".xml";
-  var locale = await loadLocaleAsync(localeName, fileName);
-
-  return (
-    locale || kcite_locales[kcite_default_locale] || kcite_locales["en-US"]
-  ); // Fallback to default locale
-}
-
-// Function to load CSL style asynchronously (for immediate use)
-async function loadCSLStyleAsync(styleName, filePath) {
-  // Try to construct the full path relative to the current script location
-  var scriptPath = "";
-  var scripts = document.getElementsByTagName("script");
-  for (var i = 0; i < scripts.length; i++) {
-    if (scripts[i].src && scripts[i].src.indexOf("kcite") !== -1) {
-      scriptPath = scripts[i].src.substring(
-        0,
-        scripts[i].src.lastIndexOf("/") + 1
-      );
-      break;
-    }
-  }
-
-  var fullPath = scriptPath + filePath;
-
+  var fileName = "locales-" + localeName + ".xml";
   try {
-    const response = await fetch(fullPath);
-    if (response.ok) {
-      const styleContent = await response.text();
-      kcite_styles[styleName] = styleContent;
-      console.log(`Successfully loaded style: ${styleName} from ${fullPath}`);
-      return styleContent;
-    } else {
-      console.error(`Failed to load CSL file ${fullPath}: ${response.status}`);
-      return null;
-    }
+    var locale = await loadLocaleFromFile(localeName, fileName);
+    return locale;
   } catch (error) {
-    console.error(`Error loading CSL file ${fullPath}:`, error);
-    return null;
+    // Fallback to default locale
+    return kcite_locales[kcite_default_locale] || kcite_locales["en-US"];
   }
 }
 
@@ -236,14 +167,16 @@ async function setCurrentStyle(styleName) {
 
   // Try to load the style if not available
   var fileName = styleName + ".csl";
-  var style = await loadCSLStyleAsync(styleName, fileName);
-  if (style) {
+  try {
+    var style = await loadCSLStyleFromFile(styleName, fileName);
     kcite_default_style = styleName;
     return true;
+  } catch (error) {
+    console.warn(
+      `Style "${styleName}" is not available and could not be loaded`
+    );
+    return false;
   }
-
-  console.warn(`Style "${styleName}" is not available and could not be loaded`);
-  return false;
 }
 
 // Function to get the current style
@@ -265,47 +198,33 @@ async function getStyle(styleName) {
 
   // Try to load it asynchronously if not available
   var fileName = styleName + ".csl";
-  var style = await loadCSLStyleAsync(styleName, fileName);
-
-  return style || kcite_styles[kcite_default_style] || kcite_styles["apa"]; // Fallback to default style
+  try {
+    var style = await loadCSLStyleFromFile(styleName, fileName);
+    return style;
+  } catch (error) {
+    // Fallback to default style
+    return kcite_styles[kcite_default_style] || kcite_styles["apa"];
+  }
 }
 
 // Function to load CSL style from local file
-function loadCSLStyleFromFile(styleName, filePath) {
-  return new Promise((resolve, reject) => {
-    // Try to construct the full path relative to the current script location
-    var scriptPath = "";
-    var scripts = document.getElementsByTagName("script");
-    for (var i = 0; i < scripts.length; i++) {
-      if (scripts[i].src && scripts[i].src.indexOf("kcite") !== -1) {
-        scriptPath = scripts[i].src.substring(
-          0,
-          scripts[i].src.lastIndexOf("/") + 1
-        );
-        break;
-      }
+async function loadCSLStyleFromFile(styleName, filePath) {
+  var fullPath = getScriptPath() + filePath;
+
+  try {
+    const response = await fetch(fullPath);
+    if (response.ok) {
+      const styleContent = await response.text();
+      kcite_styles[styleName] = styleContent;
+      console.log(`Successfully loaded style: ${styleName} from ${fullPath}`);
+      return styleContent;
+    } else {
+      throw new Error(`Failed to load CSL file: ${response.status}`);
     }
-
-    var fullPath = scriptPath + filePath;
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", fullPath, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          // Add the loaded style to kcite_styles
-          kcite_styles[styleName] = xhr.responseText;
-          console.log(
-            `Successfully loaded style: ${styleName} from ${fullPath}`
-          );
-          resolve(xhr.responseText);
-        } else {
-          reject(new Error(`Failed to load CSL file: ${xhr.status}`));
-        }
-      }
-    };
-    xhr.send();
-  });
+  } catch (error) {
+    console.error(`Error loading CSL file ${fullPath}:`, error);
+    throw error;
+  }
 }
 
 // Function to load multiple CSL files
