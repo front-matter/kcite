@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.16
+   Version: 1.7.17
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -193,17 +193,12 @@ $content
           // CSL processing engine
           wp_enqueue_script( "citeproc", plugins_url( "kcite-citeproc/citeproc.js",__FILE__  ), false, null, true );
           
-          // Locale and style management (depends on citeproc)
-          wp_enqueue_script( "kcite_locale_style", 
-                             plugins_url( "kcite-citeproc/kcite_locale_style.js", __FILE__  ), 
-                             array("citeproc"), null, true );
-          
           // Output WordPress settings as JavaScript variables
           self::output_javascript_settings();
           
-          // Main KCite functionality (depends on all above)
+          // Main KCite functionality (depends on all above) - now includes locale/style management
           wp_enqueue_script( "kcite", plugins_url( "kcite-citeproc/kcite.js",__FILE__  ), 
-                             array("jquery", "jquery-ui-button", "jquery.cookie", "citeproc", "kcite_locale_style"), null, true );
+                             array("jquery", "jquery-ui-button", "jquery.cookie", "citeproc"), null, true );
           
           wp_print_scripts( "citeproc" );
           wp_print_scripts( "jquery" );
@@ -211,7 +206,6 @@ $content
           wp_print_scripts( "jquery-ui-widget");
           wp_print_scripts( "jquery-ui-button" );
           wp_print_scripts( "jquery.cookie" );
-          wp_print_scripts( "kcite_locale_style" );
           wp_print_scripts( "kcite" );
       }
   }

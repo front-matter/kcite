@@ -5,7 +5,7 @@
  * Compatible with WordPress 6.8+ and PHP 8.4+
  * 
  * @package Kcite
- * @version 1.7.16
+ * @version 1.7.17
  */
 
 // Prevent direct access
@@ -50,8 +50,8 @@ class Kcite_Admin {
      */
     public function admin_page_init(): void {
         add_options_page(
-            'Kcite Citations', 
-            'Kcite Citations',
+            'Kcite',
+            'Kcite',
             'manage_options', 
             'kcite',
             array($this, 'plugin_options_menu')
@@ -298,7 +298,7 @@ class Kcite_Admin {
      * Render table header
      */
     public function table_head(string $nonce): void {
-        $title = esc_html__('Kcite Citations by Kblog', 'kcite');
+        $title = esc_html__('Kcite by Kblog', 'kcite');
         $description = esc_html__(
             'The defaults for these options should in most cases work perfectly well, and not need alteration.',
             'kcite'
