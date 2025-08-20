@@ -2333,13 +2333,13 @@ jQuery(document).ready(function ($) {
 
       retrieveLocale: function (lang) {
         // Return the locale from our embedded locales
-        return kcite_locales[kcite_default_locale];
+        return kcite_locales[lang] || kcite_locales[kcite_default_locale];
       },
     };
 
     // instantiate the citeproc object with the default style
-    var style = kcite_styles[kcite_default_style];
-    var citeproc = new CSL.Engine(sys, style);
+    var style_xml = kcite_styles[kcite_default_style];
+    var citeproc = new CSL.Engine(sys, style_xml);
 
     // set the modified output format
     citeproc.setOutputFormat("kcite");
@@ -2445,8 +2445,9 @@ jQuery(document).ready(function ($) {
       var bib_string = "";
 
       $.each(citeproc.makeBibliography()[1], function (index, item) {
-        if (kcite_style_cleaner[current_style()]) {
-          bib_string = bib_string + kcite_style_cleaner[current_style()](item);
+        if (kcite_style_cleaner[kcite_default_style]) {
+          bib_string =
+            bib_string + kcite_style_cleaner[kcite_default_style](item);
         } else {
           bib_string = bib_string + item;
         }
@@ -2507,49 +2508,13 @@ jQuery(document).ready(function ($) {
           '<div class="kcite-style">\
 <input type="radio" name="kcite-style' +
             kcite_section_id +
-            '">Author</input>\
-<input type="radio" name="kcite-style' +
-            kcite_section_id +
-            '">Numeric</input>\
-<input type="radio" name="kcite-style' +
-            kcite_section_id +
-            '">Numeric 2</input>\
+            '" checked="checked">APA</input>\
 </div>'
         );
         style.buttonset();
 
-        style
-          .find(":radio")
-          .eq(0)
-          .click(function () {
-            current_style("apa");
-          });
-
-        if (current_style() == "apa") {
-          style.find(":radio").eq(0).prop("checked", "true");
-        }
-
-        style
-          .find(":radio")
-          .eq(1)
-          .click(function () {
-            current_style("numeric");
-          });
-
-        if (current_style() == "numeric") {
-          style.find(":radio").eq(1).prop("checked", "true");
-        }
-
-        style
-          .find(":radio")
-          .eq(2)
-          .click(function () {
-            current_style("numeric2");
-          });
-
-        if (current_style() == "numeric2") {
-          style.find(":radio").eq(2).prop("checked", "true");
-        }
+        // APA is the default and only style now
+        style.find(":radio").eq(0).prop("checked", "true");
 
         style.appendTo(control_inner);
 
