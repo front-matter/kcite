@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.25
+   Version: 1.7.26
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -88,8 +88,6 @@ class KCite{
     add_option( 'kcite_citation_render_client', true );
     add_option( 'kcite_citation_timeout', 60 );
     add_option( 'kcite_fallback_identifier', 'doi' );
-    add_option( 'kcite_greycite_permalink', true );
-    add_option( 'kcite_greycite_private', false );
     add_option( 'kcite_cache_references', true );
     add_option( 'kcite_user_cache_version', time() );
 
@@ -686,14 +684,6 @@ EOT;
                   $cite = self::get_arxiv_metadata($cite);
               }
           }
-
-          // resolve these from metadata given in cite tag
-          if( $cite->source == "url" ){
-              $cite = self::greycite_uri_lookup($cite);
-              if($cite->resolved){
-                  $cite = self::get_greycite_metadata($cite);
-              }
-          }
           
           if( !$cite->resolved ){
               if ( $cite->json ){
@@ -835,51 +825,6 @@ EOT;
       $cite->resolved = true;
       $cite->resolution_source = $xml;
       $cite->resolved_from = "arxiv";
-      
-      return $cite;
-  }
-  private static function greycite_uri_lookup($cite){
-
-      $url = "http://greycite.knowledgeblog.org/json?uri=" . $cite->identifier;
-      
-      $params = array();
-      if( get_option( "kcite_greycite_private" ) ){
-          $params = array
-              (
-               'headers' => 
-               array( 'X-greycite-no-store' => 'true' )
-               );
-      }
-      else{
-          if( get_option( "kcite_greycite_permalink" ) ){
-              $params = array
-                  (
-                   'headers' => 
-                   array( 'X-greycite-permalink' => get_permalink( $cite->bibliography->section ) )
-                   );
-          }
-      }
-      
-      $wpresponse = wp_remote_get( $url, $params );
-
-      if( is_wp_error( $wpresponse ) ){
-          return $cite;
-      }
-      
-      $status = wp_remote_retrieve_response_code( $wpresponse );
-      
-      $cite->response_code = $status;
-
-      if( $status != 200 ){ 
-          return $cite;
-      }
-      
-      $response = wp_remote_retrieve_body( $wpresponse );
-
-      // greycite worked
-      $cite->resolved = true;
-      $cite->resolution_source=$response;
-      $cite->resolved_from="greycite";
       
       return $cite;
   }
@@ -1192,44 +1137,6 @@ EOT;
        $cite->url = "http://arxiv.org/abs/" . $cite->identifier;
          
        return self::citation_generate_json( $cite );
-   }
-
-
-   private static function get_greycite_metadata($cite){
-              
-       // We get JSON back from greycite, but we need to fiddle, so decode it first
-       $json_decoded = json_decode( $cite->resolution_source, true );
-       // all a disaster, so report resolution failure
-       $last_error = json_last_error();
-       if( $last_error != JSON_ERROR_NONE ){
-           $cite->resolved = false;
-           return $cite;
-       }
-       
-       $json_decoded["source"] = $cite->source;
-       $json_decoded["identifier"] = $cite->identifier;
-       $json_decoded["resolved"] = $cite->resolved;
-       
-       //if( !array_key_exists( "author", $json_decoded ) ){
-       //$auth = array();
-       //    $auth["family"] = "URL";
-           
-       //    $authors = array();
-       //    $authors[] = $auth;
-       //    $json_decoded["author"] = $authors;
-       //}
-           
-       $cite->json = $json_decoded;
-
-       // cache explicitly
-       if( array_key_exists( "greycite-expire", $json_decoded ) ){
-           self::cache_json( $cite, $json_decoded["greycite-expire"]);
-       }
-       else{
-           self::cache_json( $cite );
-       }
-       
-       return $cite;
    }
 
   /**

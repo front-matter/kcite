@@ -4,7 +4,7 @@ Contributors: philliplord, sjcockell, knowledgeblog, d_swan, mfenner
 Tags: references, citations, doi, crossref, pubmed, bibliography, pmid, res-comms, scholar, academic, science
 Requires at least: 3.0
 Tested up to: 6.8.2
-Stable tag: 1.7.25
+Stable tag: 1.7.26
 
 A tool for producing citations and bibliographies in Wordpress posts.
 Developed for the Knowledgeblog project (http://knowledgeblog.org).
@@ -41,8 +41,7 @@ source.
 Kcite now supports DOIs from both [CrossRef](http://www.crossref.org) and
 [DataCite](http://www.datacite.org). Identifiers from
 [PubMed](http://www.pubmed.org) or [arXiv](http://www.arxiv.org) are directly
-supported. URLs are supported via
-[Greycite](http://greycite.knowledgeblog.org).
+supported.
 
 
 From Kcite 1.4, Citeproc-js

@@ -5,7 +5,7 @@
  * Compatible with WordPress 6.8+ and PHP 8.4+
  * 
  * @package Kcite
- * @version 1.7.25
+ * @version 1.7.26
  */
 
 // Prevent direct access
@@ -152,37 +152,6 @@ class Kcite_Admin {
                 'kcite'
             ),
             $select_html
-        );
-
-        echo '<tr><td><strong>' . esc_html__('Greycite Options', 'kcite') . '</strong></td></tr>';
-
-        $greycite_permalink = get_option('kcite_greycite_permalink') ? 'checked="checked"' : '';
-        $this->admin_table_row(
-            __('Send Permalink to Greycite', 'kcite'),
-            esc_html__(
-                'If true, permalinks are sent to Greycite. This is used for statistical ' .
-                'purposes, and is useful for debugging',
-                'kcite'
-            ),
-            sprintf(
-                '<input type="checkbox" name="kcite_greycite_permalink" value="1" %s />',
-                $greycite_permalink
-            )
-        );
-
-        $greycite_private = get_option('kcite_greycite_private') ? 'checked="checked"' : '';
-        $this->admin_table_row(
-            __('Greycite Private', 'kcite'),
-            esc_html__(
-                'By default, when asked for bibliographic information about a URL, Greycite ' .
-                'scans this URL. Setting this will mean Greycite only returns information it ' .
-                'already knows.',
-                'kcite'
-            ),
-            sprintf(
-                '<input type="checkbox" name="kcite_greycite_private" value="1" %s />',
-                $greycite_private
-            )
         );
 
         echo '<tr><td><strong>' . esc_html__('Debug Options', 'kcite') . '</strong></td></tr>';
@@ -369,9 +338,6 @@ EOT;
                 update_option('kcite_fallback_identifier', $identifier);
             }
         }
-
-        update_option('kcite_greycite_permalink', isset($_POST['kcite_greycite_permalink']));
-        update_option('kcite_greycite_private', isset($_POST['kcite_greycite_private']));
 
         if (isset($_POST['kcite_invalidate'])) {
             echo '<div class="notice notice-info"><p>' . esc_html__('Cache Invalidated', 'kcite') . '</p></div>';
