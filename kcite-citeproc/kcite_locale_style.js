@@ -1,14 +1,156 @@
-// this is a locale bundle
-var kcite_locale = {
-  "en-US":
-    '<locale xml:lang="en" xmlns="http://purl.org/net/xbiblio/csl">  <style-options punctuation-in-quote="true"/>  <date form="text">    <date-part name="month" suffix=" "/>    <date-part name="day" suffix=", "/>    <date-part name="year"/>  </date>  <date form="numeric">    <date-part name="year"/>    <date-part name="month" form="numeric" prefix="-" range-delimiter="/"/>    <date-part name="day" prefix="-" range-delimiter="/"/>  </date>  <terms>    <term name="document-number-label">No.</term>    <term name="document-number-authority-suffix">Doc.</term>    <term name="un-sales-number-label">U.N. Sales No.</term>    <term name="collection-number-label">No.</term>    <term name="open-quote">\u201c</term>    <term name="close-quote">\u201d</term>    <term name="open-inner-quote">\u2018</term>    <term name="close-inner-quote">\u2019</term>    <term name="ordinal-01">st</term>    <term name="ordinal-02">nd</term>    <term name="ordinal-03">rd</term>    <term name="ordinal-04">th</term>    <term name="long-ordinal-01">first</term>    <term name="long-ordinal-02">second</term>    <term name="long-ordinal-03">third</term>    <term name="long-ordinal-04">fourth</term>    <term name="long-ordinal-05">fifth</term>    <term name="long-ordinal-06">sixth</term>    <term name="long-ordinal-07">seventh</term>    <term name="long-ordinal-08">eighth</term>    <term name="long-ordinal-09">ninth</term>    <term name="long-ordinal-10">tenth</term>    <term name="at">at</term>    <term name="in">in</term>    <term name="ibid">ibid</term>    <term name="accessed">accessed</term>    <term name="retrieved">retrieved</term>    <term name="from">from</term>    <term name="forthcoming">forthcoming</term>    <term name="references">      <single>reference</single>      <multiple>references</multiple>    </term>    <term name="references" form="short">      <single>ref</single>      <multiple>refs</multiple>    </term>    <term name="no date">n.d.</term>    <term name="and">and</term>    <term name="et-al">et al.</term>    <term name="interview">interview</term>    <term name="letter">letter</term>    <term name="anonymous">anonymous</term>    <term name="anonymous" form="short">anon.</term>    <term name="and others">and others</term>    <term name="in press">in press</term>    <term name="online">online</term>    <term name="cited">cited</term>    <term name="internet">internet</term>    <term name="presented at">presented at the</term>    <term name="ad">AD</term>    <term name="bc">BC</term>    <term name="season-01">Spring</term>    <term name="season-02">Summer</term>    <term name="season-03">Autumn</term>    <term name="season-04">Winter</term>    <term name="with">with</term>        <!-- CATEGORIES -->    <term name="anthropology">anthropology</term>    <term name="astronomy">astronomy</term>    <term name="biology">biology</term>    <term name="botany">botany</term>    <term name="chemistry">chemistry</term>    <term name="engineering">engineering</term>    <term name="generic-base">generic base</term>    <term name="geography">geography</term>    <term name="geology">geology</term>    <term name="history">history</term>    <term name="humanities">humanities</term>    <term name="literature">literature</term>    <term name="math">math</term>    <term name="medicine">medicine</term>    <term name="philosophy">philosophy</term>    <term name="physics">physics</term>    <term name="psychology">psychology</term>    <term name="sociology">sociology</term>    <term name="science">science</term>    <term name="political_science">political science</term>    <term name="social_science">social science</term>    <term name="theology">theology</term>    <term name="zoology">zoology</term>        <!-- LONG LOCATOR FORMS -->    <term name="book">      <single>book</single>      <multiple>books</multiple>    </term>    <term name="chapter">      <single>chapter</single>      <multiple>chapters</multiple>    </term>    <term name="column">      <single>column</single>      <multiple>columns</multiple>    </term>    <term name="figure">      <single>figure</single>      <multiple>figures</multiple>    </term>    <term name="folio">      <single>folio</single>      <multiple>folios</multiple>    </term>    <term name="issue">      <single>number</single>      <multiple>numbers</multiple>    </term>    <term name="line">      <single>line</single>      <multiple>lines</multiple>    </term>    <term name="note">      <single>note</single>      <multiple>notes</multiple>    </term>    <term name="opus">      <single>opus</single>      <multiple>opera</multiple>    </term>    <term name="page">      <single>page</single>      <multiple>pages</multiple>    </term>    <term name="paragraph">      <single>paragraph</single>      <multiple>paragraph</multiple>    </term>    <term name="part">      <single>part</single>      <multiple>parts</multiple>    </term>    <term name="section">      <single>section</single>      <multiple>sections</multiple>    </term>    <term name="volume">      <single>volume</single>      <multiple>volumes</multiple>    </term>    <term name="edition">      <single>edition</single>      <multiple>editions</multiple>    </term>    <term name="verse">      <single>verse</single>      <multiple>verses</multiple>    </term>    <term name="sub verbo">      <single>sub verbo</single>      <multiple>s.vv</multiple>    </term>        <!-- SHORT LOCATOR FORMS -->    <term name="book" form="short">bk.</term>    <term name="chapter" form="short">chap.</term>    <term name="column" form="short">col.</term>    <term name="figure" form="short">fig.</term>    <term name="folio" form="short">f.</term>    <term name="issue" form="short">no.</term>    <term name="opus" form="short">op.</term>    <term name="page" form="short">      <single>p.</single>      <multiple>pp.</multiple>    </term>    <term name="paragraph" form="short">para.</term>    <term name="part" form="short">pt.</term>    <term name="section" form="short">sec.</term>    <term name="sub verbo" form="short">      <single>s.v.</single>      <multiple>s.vv.</multiple>    </term>    <term name="verse" form="short">      <single>v.</single>      <multiple>vv.</multiple>    </term>    <term name="volume" form="short">    	<single>vol.</single>    	<multiple>vols.</multiple>    </term>    <term name="edition">edition</term>    <term name="edition" form="short">ed.</term>        <!-- SYMBOL LOCATOR FORMS -->    <term name="paragraph" form="symbol">      <single>¶</single>      <multiple>¶¶</multiple>    </term>    <term name="section" form="symbol">      <single>§</single>      <multiple>§§</multiple>    </term>        <!-- LONG ROLE FORMS -->    <term name="author">      <single></single>      <multiple></multiple>    </term>    <term name="editor">      <single>editor</single>      <multiple>editors</multiple>    </term>    <term name="translator">      <single>translator</single>      <multiple>translators</multiple>    </term>        <!-- SHORT ROLE FORMS -->    <term name="author" form="short">      <single></single>      <multiple></multiple>    </term>    <term name="editor" form="short">      <single>ed.</single>      <multiple>eds.</multiple>    </term>    <term name="translator" form="short">      <single>tran.</single>      <multiple>trans.</multiple>    </term>        <!-- VERB ROLE FORMS -->    <term name="editor" form="verb">edited by</term>    <term name="translator" form="verb">translated by</term>    <term name="recipient" form="verb">to</term>    <term name="interviewer" form="verb">interview by</term>        <!-- SHORT VERB ROLE FORMS -->    <term name="editor" form="verb-short">ed.</term>    <term name="translator" form="verb-short">trans.</term>        <!-- LONG MONTH FORMS -->    <term name="month-01">January</term>    <term name="month-02">February</term>    <term name="month-03">March</term>    <term name="month-04">April</term>    <term name="month-05">May</term>    <term name="month-06">June</term>    <term name="month-07">July</term>    <term name="month-08">August</term>    <term name="month-09">September</term>    <term name="month-10">October</term>    <term name="month-11">November</term>    <term name="month-12">December</term>        <!-- SHORT MONTH FORMS -->    <term name="month-01" form="short">Jan.</term>    <term name="month-02" form="short">Feb.</term>    <term name="month-03" form="short">Mar.</term>    <term name="month-04" form="short">Apr.</term>	<term name="month-05" form="short">May</term>    <term name="month-06" form="short">Jun.</term>    <term name="month-07" form="short">Jul.</term>    <term name="month-08" form="short">Aug.</term>    <term name="month-09" form="short">Sep.</term>    <term name="month-10" form="short">Oct.</term>    <term name="month-11" form="short">Nov.</term>    <term name="month-12" form="short">Dec.</term>  </terms></locale>',
+// Storage objects for locales and styles
+var kcite_locales = {
+  "en-US": null, // Will be loaded on demand or from embedded data
+};
+var kcite_styles = {
+  apa: null, // Will be loaded on demand
 };
 
-var kcite_styles = {};
+// Locale loading functions
+function loadLocaleFromFile(localeName, filePath) {
+  return new Promise((resolve, reject) => {
+    // Try to construct the full path relative to the current script location
+    var scriptPath = "";
+    var scripts = document.getElementsByTagName("script");
+    for (var i = 0; i < scripts.length; i++) {
+      if (scripts[i].src && scripts[i].src.indexOf("kcite") !== -1) {
+        scriptPath = scripts[i].src.substring(
+          0,
+          scripts[i].src.lastIndexOf("/") + 1
+        );
+        break;
+      }
+    }
 
-// chicago_author_date
-kcite_styles["chicago-author-date"] =
-  '<style       xmlns="http://purl.org/net/xbiblio/csl"      class="in-text"   default-locale="en-US-x-sort-ja-alalc97-x-sec-en">  <!-- BOGUS COMMENT -->  <info>    <title>Chicago Manual of Style (Author-Date format)</title>    <id>http://www.zotero.org/styles/chicago-author-date</id>    <link href="http://www.zotero.org/styles/chicago-author-date" />    <author>      <name>Julian Onions</name>      <email>julian.onions@gmail.com</email>    </author>    <category term="author-date" />    <category term="generic-base" />    <updated />    <summary>The author-date variant of the Chicago style</summary>    <link href="http://www.chicagomanualofstyle.org/tools_citationguide.html" rel="documentation" />  </info> <macro name="secondary-contributors">    <choose>      <if match="none" type="chapter">        <group delimiter=". ">          <choose>            <if variable="author">              <names variable="editor">                <label form="verb-short" prefix=" " suffix=". " text-case="capitalize-first" />                <name and="text" delimiter=", " />              </names>            </if>          </choose>          <choose>            <if match="any" variable="author editor">              <names variable="translator">                <label form="verb-short" prefix=" " suffix=". " text-case="capitalize-first" />                <name and="text" delimiter=", " />              </names>            </if>          </choose>        </group>      </if>    </choose>  </macro>  <macro name="container-contributors">    <choose>      <if type="chapter">        <group delimiter=", " prefix=",">          <choose>            <if variable="author">              <names variable="editor">                <label form="verb-short" prefix=" " suffix=". " text-case="lowercase" />                <name and="text" delimiter=", " />              </names>            </if>          </choose>          <choose>            <if match="any" variable="author editor">              <names variable="translator">                <label form="verb-short" prefix=" " suffix=". " text-case="lowercase" />                <name and="text" delimiter=", " />              </names>            </if>          </choose>        </group>      </if>    </choose>  </macro>  <macro name="anon">    <choose>      <if match="none" variable="author editor translator">        <text form="short" term="anonymous" text-case="capitalize-first" />      </if>    </choose>  </macro>  <macro name="editor">    <names variable="editor">      <name and="text" delimiter=", " delimiter-precedes-last="always" name-as-sort-order="first" sort-separator=", " />      <label form="short" prefix=", " suffix="." />    </names>  </macro>  <macro name="translator">    <names variable="translator">      <name and="text" delimiter=", " delimiter-precedes-last="always" name-as-sort-order="first" sort-separator=", " />      <label form="verb-short" prefix=", " suffix="." />    </names>  </macro>  <macro name="recipient">    <choose>      <if type="personal_communication">        <choose>          <if variable="genre">            <text text-case="capitalize-first" variable="genre" />          </if>          <else>            <text term="letter" text-case="capitalize-first" />          </else>        </choose>      </if>    </choose>    <names delimiter=", " variable="recipient">      <label form="verb" prefix=" " suffix=" " text-case="lowercase" />      <name and="text" delimiter=", " />    </names>  </macro>  <macro name="contributors">    <names variable="author">      <name and="text" delimiter=", " delimiter-precedes-last="always" name-as-sort-order="first" sort-separator=", " />      <label form="verb-short" prefix=", " suffix="." text-case="lowercase" />      <substitute>        <text macro="editor" />        <text macro="translator" />      </substitute>    </names>    <text macro="anon" />    <text macro="recipient" />  </macro>  <macro name="contributors-short">    <names variable="author">      <name and="text" delimiter=", " form="short" />      <substitute>        <names variable="editor" />        <names variable="translator" />      </substitute>    </names>    <text macro="anon" />  </macro>  <macro name="interviewer">    <names delimiter=", " variable="interviewer">      <label form="verb" prefix=" " suffix=" " text-case="capitalize-first" />      <name and="text" delimiter=", " />    </names>  </macro>  <macro name="archive">    <group delimiter=". ">      <text text-case="capitalize-first" variable="archive_location" />      <text variable="archive" />      <text variable="archive-place" />    </group>  </macro>  <macro name="access">    <group delimiter=". ">      <choose>        <if match="any" type="graphic report">          <text macro="archive" />        </if>        <else-if match="none" type="book thesis chapter article-journal article-newspaper article-magazine">          <text macro="archive" />        </else-if>      </choose>      <text prefix="doi:" variable="DOI" />      <text variable="URL" />    </group>  </macro>  <macro name="title">    <choose>      <if match="none" variable="title">        <choose>          <if match="none" type="personal_communication">            <text text-case="capitalize-first" variable="genre" />          </if>        </choose>      </if>      <else-if type="book">        <text font-style="italic" variable="title" />      </else-if>      <else>        <text variable="title" />      </else>    </choose>  </macro>  <macro name="edition">    <choose>      <if match="any" type="book chapter">        <choose>          <if is-numeric="edition">            <group delimiter=" ">              <number form="ordinal" variable="edition" />              <text form="short" suffix="." term="edition" />            </group>          </if>          <else>            <text suffix="." variable="edition" />          </else>        </choose>      </if>    </choose>  </macro>  <macro name="locators">    <choose>      <if type="article-journal">        <text prefix=" " variable="volume" />        <text prefix=", no. " variable="issue" />      </if>      <else-if type="book">        <group delimiter=". " prefix=". ">          <group>            <text form="short" suffix=". " term="volume" text-case="capitalize-first" />            <number form="numeric" variable="volume" />          </group>          <group>            <number form="numeric" variable="number-of-volumes" />            <text form="short" plural="true" prefix=" " suffix="." term="volume" />          </group>        </group>      </else-if>    </choose>  </macro>  <macro name="locators-chapter">    <choose>      <if type="chapter">        <group prefix=", ">          <text suffix=":" variable="volume" />          <text variable="page" />        </group>      </if>    </choose>  </macro>  <macro name="locators-article">    <choose>      <if type="article-newspaper">        <group delimiter=", " prefix=", ">          <group>            <text suffix=" " variable="edition" />            <text prefix=" " term="edition" />          </group>          <group>            <text form="short" suffix=". " term="section" />            <text variable="section" />          </group>        </group>      </if>      <else-if type="article-journal">        <text prefix=": " variable="page" />      </else-if>    </choose>  </macro>  <macro name="point-locators">    <group>      <choose>        <if locator="page" match="none">          <label form="short" strip-periods="false" suffix=" " variable="locator" />        </if>      </choose>      <text variable="locator" />    </group>  </macro>  <macro name="container-prefix">    <text term="in" text-case="capitalize-first" />  </macro>  <macro name="container-title">    <choose>      <if type="chapter">        <text macro="container-prefix" suffix=" " />      </if>    </choose>    <text font-style="italic" variable="container-title" form="short"/>  </macro>  <macro name="publisher">    <group delimiter=": ">      <text variable="publisher-place" />      <text variable="publisher" />    </group>  </macro>  <macro name="date">    <date variable="issued" form="text" date-parts="year"><date-part name="year"/></date>  </macro>  <macro name="day-month">    <date variable="issued">      <date-part name="month" />      <date-part name="day" prefix=" " />    </date>  </macro>  <macro name="collection-title">    <text variable="collection-title" />    <text prefix=" " variable="collection-number" />  </macro>  <macro name="event">    <group>      <text suffix=" " term="presented at" />      <text variable="event" />    </group>  </macro>  <macro name="description">    <group delimiter=". ">      <text macro="interviewer" />      <text text-case="capitalize-first" variable="medium" />    </group>    <choose>      <if match="none" variable="title"> </if>      <else-if type="thesis"> </else-if>      <else>        <text prefix=". " text-case="capitalize-first" variable="genre" />      </else>    </choose>  </macro>  <macro name="issue">    <choose>      <if type="article-journal">        <text macro="day-month" prefix=" (" suffix=")" />      </if>      <else-if type="speech">        <group delimiter=", " prefix=" ">          <text macro="event" />          <text macro="day-month" />          <text variable="event-place" />        </group>      </else-if>      <else-if match="any" type="article-newspaper article-magazine">        <text macro="day-month" prefix=", " />      </else-if>      <else>        <group delimiter=", " prefix=". ">          <choose>            <if type="thesis">              <text text-case="capitalize-first" variable="genre" />            </if>          </choose>          <text macro="publisher" />          <text macro="day-month" />        </group>      </else>    </choose>  </macro>  <citation          disambiguate-add-givenname="true"         disambiguate-add-names="true"         disambiguate-add-year-suffix="true"         et-al-min="4"         et-al-subsequent-min="4"         et-al-subsequent-use-first="1"         et-al-use-first="1">    <layout text-decoration="underline" delimiter="; " prefix="(" suffix=")">      <group delimiter=", ">        <group delimiter=" ">          <text macro="contributors-short" />          <text macro="date" />        </group>        <text macro="point-locators" />      </group>    </layout>  </citation>  <bibliography          entry-spacing="0"         et-al-min="11"         et-al-use-first="7"         hanging-indent="true"         subsequent-author-substitute="---">    <sort>      <key macro="contributors" />      <key variable="issued" />    </sort>    <layout suffix=".">      <text macro="contributors" suffix=". " />      <text macro="date" suffix=". " />      <text macro="title" />      <text macro="description"/>      <text macro="secondary-contributors" prefix=". " />      <text macro="container-title" prefix=". "/>      <text macro="container-contributors" />      <text macro="locators-chapter" />      <text macro="edition" prefix=". " />      <text macro="locators" />      <text macro="collection-title" prefix=". " />      <text macro="issue" />      <text macro="locators-article" />      <text macro="access" prefix=". " />    </layout>  </bibliography></style>';
+    var fullPath = scriptPath + filePath;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", fullPath, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // Add the loaded locale to kcite_locales
+          kcite_locales[localeName] = xhr.responseText;
+          console.log(
+            `Successfully loaded locale: ${localeName} from ${fullPath}`
+          );
+          resolve(xhr.responseText);
+        } else {
+          reject(new Error(`Failed to load locale file: ${xhr.status}`));
+        }
+      }
+    };
+    xhr.send();
+  });
+}
+
+function loadLocaleSync(localeName, filePath) {
+  // Try to construct the full path relative to the current script location
+  var scriptPath = "";
+  var scripts = document.getElementsByTagName("script");
+  for (var i = 0; i < scripts.length; i++) {
+    if (scripts[i].src && scripts[i].src.indexOf("kcite") !== -1) {
+      scriptPath = scripts[i].src.substring(
+        0,
+        scripts[i].src.lastIndexOf("/") + 1
+      );
+      break;
+    }
+  }
+
+  var fullPath = scriptPath + filePath;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", fullPath, false); // Synchronous request
+  try {
+    xhr.send();
+    if (xhr.status === 200) {
+      kcite_locales[localeName] = xhr.responseText;
+      console.log(`Successfully loaded locale: ${localeName} from ${fullPath}`);
+      return xhr.responseText;
+    } else {
+      console.error(`Failed to load locale file ${fullPath}: ${xhr.status}`);
+      return null;
+    }
+  } catch (error) {
+    console.error(`Error loading locale file ${fullPath}:`, error);
+    return null;
+  }
+}
+
+// Function to load multiple locale files
+async function loadAllLocales() {
+  const localesToLoad = ["de-DE", "fr-FR", "es-ES", "en-US"];
+
+  for (const localeName of localesToLoad) {
+    try {
+      await loadLocaleFromFile(
+        localeName,
+        "locale_" + localeName.toLowerCase() + ".xml"
+      );
+      console.log(`Loaded locale: ${localeName}`);
+    } catch (error) {
+      console.warn(`Failed to load locale ${localeName}:`, error);
+    }
+  }
+}
+
+// Function to get available locales
+function getAvailableLocales() {
+  return Object.keys(kcite_locales);
+}
+
+// Function to check if a locale is available
+function isLocaleAvailable(localeName) {
+  return localeName in kcite_locales;
+}
+
+// Function to set the current locale
+function setCurrentLocale(localeName) {
+  if (isLocaleAvailable(localeName)) {
+    kcite_default_locale = localeName;
+    return true;
+  }
+
+  // Try to load the locale if not available
+  var fileName = "locale_" + localeName.toLowerCase() + ".xml";
+  var locale = loadLocaleSync(localeName, fileName);
+  if (locale) {
+    kcite_default_locale = localeName;
+    return true;
+  }
+
+  console.warn(
+    `Locale "${localeName}" is not available and could not be loaded`
+  );
+  return false;
+}
+
+// Function to get the current locale
+function getCurrentLocale() {
+  return kcite_default_locale || "en-US";
+}
+
+// Enhanced locale retrieval function that can load locales on demand
+function getLocale(localeName) {
+  // If no locale specified, use current locale
+  if (!localeName) {
+    localeName = getCurrentLocale();
+  }
+
+  // If locale is already loaded, return it
+  if (kcite_locales[localeName]) {
+    return kcite_locales[localeName];
+  }
+
+  // Try to load it synchronously if not available
+  var fileName = "locale_" + localeName.toLowerCase() + ".xml";
+  var locale = loadLocaleSync(localeName, fileName);
+
+  return (
+    locale || kcite_locales[kcite_default_locale] || kcite_locales["en-US"]
+  ); // Fallback to default locale
+}
 
 // Function to load CSL style synchronously (for immediate use)
 function loadCSLStyleSync(styleName, filePath) {
@@ -59,8 +201,18 @@ function getAvailableStyles() {
   };
 }
 
+// Function to get all loaded styles
+function getLoadedStyles() {
+  return Object.keys(kcite_styles);
+}
+
 // Function to check if a style is available
 function isStyleAvailable(styleName) {
+  // Check if style is already loaded
+  if (styleName in kcite_styles) {
+    return true;
+  }
+  // Check if style is in the list of known styles
   return styleName in getAvailableStyles();
 }
 
@@ -70,8 +222,41 @@ function setCurrentStyle(styleName) {
     kcite_default_style = styleName;
     return true;
   }
-  console.warn(`Style "${styleName}" is not available`);
+
+  // Try to load the style if not available
+  var fileName = styleName + ".csl";
+  var style = loadCSLStyleSync(styleName, fileName);
+  if (style) {
+    kcite_default_style = styleName;
+    return true;
+  }
+
+  console.warn(`Style "${styleName}" is not available and could not be loaded`);
   return false;
+}
+
+// Function to get the current style
+function getCurrentStyle() {
+  return kcite_default_style || "apa";
+}
+
+// Enhanced style retrieval function that can load styles on demand
+function getStyle(styleName) {
+  // If no style specified, use current style
+  if (!styleName) {
+    styleName = getCurrentStyle();
+  }
+
+  // If style is already loaded, return it
+  if (kcite_styles[styleName]) {
+    return kcite_styles[styleName];
+  }
+
+  // Try to load it synchronously if not available
+  var fileName = styleName + ".csl";
+  var style = loadCSLStyleSync(styleName, fileName);
+
+  return style || kcite_styles[kcite_default_style] || kcite_styles["apa"]; // Fallback to default style
 }
 
 // Function to load CSL style from local file
@@ -135,9 +320,18 @@ async function loadAllCSLStyles() {
   }
 }
 
-// Load CSL styles when the page loads
+// Load CSL styles and locales when the page loads
 if (typeof window !== "undefined") {
-  window.addEventListener("load", loadAllCSLStyles);
+  window.addEventListener("load", async function () {
+    try {
+      // Load styles and locales in parallel
+      await Promise.all([loadAllCSLStyles(), loadAllLocales()]);
+      console.log("All styles and locales loaded successfully");
+    } catch (error) {
+      console.error("Error loading styles or locales:", error);
+    }
+  });
 }
 
 var kcite_default_style = "apa";
+var kcite_default_locale = "en-US";
