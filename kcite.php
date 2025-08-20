@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.27
+   Version: 1.7.28
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -454,8 +454,6 @@ EOT;
       
       foreach ($pub_array as $pub) {
           
-          $anchor = "<a name='". $pub['id'] . "'></a>";
-          
           if( array_key_exists( "timeout", $pub ) ){
               if( array_key_exists( "source", $pub ) ){
                       $source = $pub[ "source" ] . ":";
@@ -465,7 +463,7 @@ EOT;
               }
                           
               $bib_string .= 
-                  "<li>$anchor" . $source . $pub["identifier"] .
+                  "<li id='$anchor'>" . $source . $pub["identifier"] .
                   " <i>(Timed out)</i></li>\n";
               $i++;
               continue;                 

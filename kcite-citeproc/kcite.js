@@ -598,7 +598,6 @@ if (typeof window !== "undefined") {
 // modify the HTML output format so that the bibliography hyperlinks
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
-  console.log("CSL @bibliography/body state:", state);
   return '<ol class="csl-bib-body">\n' + str + "</ol>";
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
@@ -606,9 +605,9 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   console.log("CSL @bibliography/entry state:", state);
 
   // Use item_id directly for anchor name
-  var anchorName = "ITEM-44-1" || "";
+  var anchorName = "#ITEM-44-1" || "";
 
-  return '  <li class="csl-entry">' + '<a name="' + anchorName + '"></a>' + str;
+  return '  <li class="csl-entry" id="' + anchorName + '">' + str;
 };
 
 // kcite output is not hyperlinked or any such. These functions apply filters
