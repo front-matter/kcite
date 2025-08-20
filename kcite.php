@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: http://knowledgeblog.org/kcite-plugin
    Description: Add references and bibliography to blogposts
-   Version: 1.7.31
+   Version: 1.7.32
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -325,15 +325,8 @@ $content
           $citation = self::$bibliography->add_cite( $cite );
           $anchor = $citation->anchor;
           $bibindex = $citation->bibindex;
-          if (isset($stubs[$cite->source])) {
-              $url = $stubs[$cite->source] . $cite->identifier;
-              $in_text = "<a href=\"$url\">$url</a>";
-          } else {
-              // $in_text = $cite->identifier;
-              $in_text = "<a href=\"#$anchor\">[$bibindex]</a>";
-          }
-
-          return "<span class=\"kcite\" kcite-id=\"$anchor\">($in_text)</span>";
+          $in_text = "<a href=\"#$anchor\">[$bibindex]</a></span>";
+          return "<span class=\"kcite\" kcite-id=\"$anchor\">$in_text</span>";
       }
   }
 
