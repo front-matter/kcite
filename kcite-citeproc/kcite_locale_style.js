@@ -11,9 +11,11 @@ var kcite_default_style = "apa";
 var kcite_default_locale = "en-US";
 
 // Load WordPress settings if available
-if (typeof window.kciteSettings !== 'undefined') {
-  kcite_default_style = window.kciteSettings.defaultStyle || kcite_default_style;
-  kcite_default_locale = window.kciteSettings.defaultLocale || kcite_default_locale;
+if (typeof window.kciteSettings !== "undefined") {
+  kcite_default_style =
+    window.kciteSettings.defaultStyle || kcite_default_style;
+  kcite_default_locale =
+    window.kciteSettings.defaultLocale || kcite_default_locale;
 }
 
 // Helper function to get script path
