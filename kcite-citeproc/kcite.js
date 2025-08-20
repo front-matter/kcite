@@ -602,12 +602,7 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   return (
-    '  <li class="csl-entry">' +
-    '<a name="' +
-    this.item_id +
-    '"></a>' +
-    str +
-    "\n</li>"
+    '  <li class="csl-entry">' + '<a name="' + this.item_id + '"></a>' + str
   );
 };
 
