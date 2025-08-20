@@ -672,24 +672,27 @@ jQuery(document).ready(function ($) {
 
   var get_style = function () {
     var styleName = current_style();
-    var style = kcite_styles[styleName];
 
-    // If style is not loaded or is null, try to load from CSL file
+    // Use the synchronous style retrieval function with proper fallback logic
+    var style = getStyleSync(styleName);
+
+    // Log warning if we had to fall back to a different style
     if (!style) {
-      var cslFileName = "styles/" + styleName + ".csl";
-      style = loadCSLStyleSync(styleName, cslFileName);
-    }
-
-    // If still no style, try fallback styles
-    if (!style) {
-      console.warn("Style '" + styleName + "' not found, trying fallbacks...");
-      style = kcite_styles[kcite_default_style] || kcite_styles["apa"] || null;
-
-      if (!style) {
-        console.error(
-          "No fallback styles available. Please ensure at least one CSL style is loaded."
-        );
-      }
+      console.error(
+        "No CSL styles available. Please ensure at least one CSL style is loaded."
+      );
+    } else if (
+      kcite_styles[styleName] === null ||
+      kcite_styles[styleName] === undefined
+    ) {
+      console.warn(
+        "Style '" +
+          styleName +
+          "' not loaded, using fallback: " +
+          (style === kcite_styles[kcite_default_style]
+            ? kcite_default_style
+            : "apa")
+      );
     }
 
     return style;
