@@ -2379,6 +2379,7 @@ jQuery(document).ready(function ($) {
         task_queue.push(function () {
           var cite_id = kcite_element.attr("kcite-id");
           var cite = sys.retrieveItem(cite_id);
+          var bibindex = cite_id.split("-").pop();
 
           // the true here should mean that citeproc always
           // returns only a single element array. It doesn't
@@ -2388,14 +2389,13 @@ jQuery(document).ready(function ($) {
           //console.log( citation );
           // citeproc's wierd return values. Last element is citation we want.
           // last element again is the HTML.
-          var citation_string = citation.pop().pop();
 
           var citation =
             '<a href="#' +
             cite_id +
-            '">' +
-            citation_string +
-            "</a>" +
+            '">[' +
+            bibindex +
+            "]</a>" +
             '<a href="' +
             cite["URL"] +
             '">*</a>';
