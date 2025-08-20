@@ -2258,10 +2258,7 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
   return '<ol class="csl-bib-body">\n' + str + "</ol>";
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
-  // Use item_id directly for anchor name
-  var anchorName = this.item_id || "";
-
-  return '  <li class="csl-entry" id="' + anchorName + '">' + str;
+  return '  <li class="csl-entry">' + str;
 };
 
 // kcite output is not hyperlinked or any such. These functions apply filters
@@ -2381,7 +2378,7 @@ jQuery(document).ready(function ($) {
           var cite = sys.retrieveItem(cite_id);
           console.log(cite);
 
-          var bibindex = cite_id.split("-").pop();
+          var bibindex = parseInt(cite_id.split("-").pop()) + 1;
 
           // the true here should mean that citeproc always
           // returns only a single element array. It doesn't
@@ -2396,7 +2393,7 @@ jQuery(document).ready(function ($) {
             '<a href="#' +
             cite_id +
             '">[' +
-            bibindex +
+            bibindex.toString() +
             "]</a>" +
             '<a href="' +
             cite["URL"] +
@@ -2447,6 +2444,7 @@ jQuery(document).ready(function ($) {
       var bib_string = "";
 
       $.each(citeproc.makeBibliography()[1], function (index, item) {
+        console.log(index, item);
         if (kcite_style_cleaner[kcite_default_style]) {
           bib_string =
             bib_string + kcite_style_cleaner[kcite_default_style](item);
