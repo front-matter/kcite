@@ -3091,7 +3091,7 @@ CSL.XmlDOM.prototype.flagDateMacros = function (myxml) {
 CSL.setupXml = function (xmlObject) {
   var dataObj = {};
   var parser = null;
-  if ("undefined" !== typeof xmlObject) {
+  if ("undefined" !== typeof xmlObject && xmlObject !== null) {
     if ("string" === typeof xmlObject) {
       xmlObject = xmlObject.replace("^\uFEFF", "").replace(/^\s+/, "");
       if (xmlObject.slice(0, 1) === "<") {
@@ -3102,10 +3102,10 @@ CSL.setupXml = function (xmlObject) {
         dataObj = JSON.parse(xmlObject);
       }
       parser = new CSL.XmlJSON(dataObj);
-    } else if ("undefined" !== typeof xmlObject.getAttribute) {
+    } else if (xmlObject && "undefined" !== typeof xmlObject.getAttribute) {
       // Assume DOM instance
       parser = new CSL.XmlDOM(xmlObject);
-    } else if ("undefined" !== typeof xmlObject.toXMLString) {
+    } else if (xmlObject && "undefined" !== typeof xmlObject.toXMLString) {
       // Assume E4X object
       parser = new CSL.XmlE4X(xmlObject);
     } else {
