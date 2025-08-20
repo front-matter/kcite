@@ -2312,6 +2312,10 @@ kcite_style_cleaner["nature"] = function (bib_item) {
   );
 };
 
+// ====================================================================
+// STYLE MANAGEMENT FUNCTIONS
+// ====================================================================
+
 jQuery.noConflict();
 jQuery(document).ready(function ($) {
   var kcite_controls_shown = false;
@@ -2328,12 +2332,14 @@ jQuery(document).ready(function ($) {
       },
 
       retrieveLocale: function (lang) {
-        return kcite_default_locale;
+        // Return the locale from our embedded locales
+        return kcite_locales[kcite_default_locale];
       },
     };
 
-    // instantiate the citeproc object
-    var citeproc = new CSL.Engine(sys, kcite_default_style);
+    // instantiate the citeproc object with the default style
+    var style = kcite_styles[kcite_default_style];
+    var citeproc = new CSL.Engine(sys, style);
 
     // set the modified output format
     citeproc.setOutputFormat("kcite");
@@ -2584,18 +2590,6 @@ to generate the references due to an internal error.</p>'
       .each(function () {
         var kcite_section = $(this);
         var kcite_section_id = $(this).attr("kcite-section-id");
-
-        // Check if default style is loaded before proceeding
-        if (!kcite_default_style_loaded && !kcite_styles[kcite_default_style]) {
-          console.warn(
-            "Default style not yet loaded, delaying bibliography rendering..."
-          );
-          // Retry after a short delay
-          setTimeout(function () {
-            load_bibliography();
-          }, 500);
-          return;
-        }
 
         $.ajax({
           // hmm, security trap here if we serve from localhost
