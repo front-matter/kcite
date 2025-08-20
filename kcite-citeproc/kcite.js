@@ -117,7 +117,7 @@ jQuery(document).ready(function ($) {
       },
 
       retrieveLocale: function (lang) {
-        return getLocale(lang) || kcite_locales[lang];
+        return getLocaleSync(lang) || kcite_locales[lang] || null;
       },
     };
 
