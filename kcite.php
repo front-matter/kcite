@@ -453,6 +453,8 @@ EOT;
     ";
       
       foreach ($pub_array as $pub) {
+
+          $anchor = $pub['id'];
           
           if( array_key_exists( "timeout", $pub ) ){
               if( array_key_exists( "source", $pub ) ){
@@ -487,7 +489,6 @@ EOT;
 
               $bib_string .= "<li id='$anchor'>
 ";
-
               //
               // author
               // 
