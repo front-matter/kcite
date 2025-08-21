@@ -440,14 +440,15 @@ EOT;
    */
   private static function build_bibliography($pub_array) {
 
-      $i = 1;
       $bib_string = "<h2>References</h2>
-    <ol class=\"kcite-bibliography csl-bib-body\" style=\"padding-inline-start: 1em;\">
+    <ul class=\"kcite-bibliography csl-bib-body\" style=\"list-style-type: none; padding-left: 0;\">
     ";
       
-      foreach ($pub_array as $pub) {
+      // Process references in array order to maintain citation sequence
+      foreach ($pub_array as $index => $pub) {
 
           $anchor = $pub['id'];
+          $display_number = $index + 1; // 1-based numbering for display
           
           if( array_key_exists( "timeout", $pub ) ){
               if( array_key_exists( "source", $pub ) ){
@@ -460,7 +461,6 @@ EOT;
               $bib_string .= 
                   "<li id=\"" . esc_attr($anchor) . "\">". $source . esc_html($pub["identifier"]) .
                   " <i>(Timed out)</i></li>\n";
-              $i++;
               continue;                 
           }
 
@@ -551,13 +551,11 @@ EOT;
               }
               $bib_string .= "
 
-
 </li>
 ";
           }
-          $i++;
       }
-      $bib_string .= "</ol>
+      $bib_string .= "</ul>
 ";
 
       if( self::$bibliography->contains_timeout ){
