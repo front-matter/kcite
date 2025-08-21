@@ -2631,8 +2631,11 @@ if (typeof window.kciteSettings !== "undefined") {
 
 // modify the HTML output format so that the bibliography hyperlinks
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
+CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
+  return '<ol class="kcite-bibliography csl-bib-body">' + str + "</ol>";
+};
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
-  return '  <div class="csl-entry" id="' + this.system_id + '">' + str;
+  return '  <li class="csl-entry" id="' + this.system_id + '">' + str;
 };
 
 // kcite output is not hyperlinked or any such. These functions apply filters
