@@ -2589,10 +2589,7 @@ jQuery(document).ready(function ($) {
             citation_html = last_citation[1]; // The HTML is in index 1
           }
 
-          // Use the formatted citation from citeproc.js, with hyperlink to bibliography
-          var citation = citation_html
-            ? '<a href="#' + cite_id + '">' + citation_html + "</a>"
-            : '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
+          var citation = '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
 
           kcite_element.html(citation);
         });
