@@ -2530,68 +2530,35 @@ jQuery(document).ready(function ($) {
     // set the modified output format
     citeproc.setOutputFormat("kcite");
 
-    // store all the ids that we are going to use. We register these with
-    // citeproc, which should mean that references which would otherwise
-    // be identical, can be disambiguated ("2011a, 2011b").
+    // store all citation data for batch processing
     var cite_ids = [];
+    var citation_elements = [];
 
-    // select all of the kcite citations
+    // select all of the kcite citations and collect them
     kcite_section.find(".kcite").each(function (index) {
       var cite_id = $(this).attr("kcite-id");
       var cite = sys.retrieveItem(cite_id);
-      // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
 
       if (cite["resolved"]) {
         cite_ids.push(cite_id);
-        //console.log( "push cite_id" + cite_id );
-        // check here whether resolved == true before proceeding.
-        var citation_object = {
-          citationItems: [
-            {
-              id: $(this).attr("kcite-id"),
+
+        // Store citation information for batch processing
+        citation_elements.push({
+          element: kcite_element,
+          cite_id: cite_id,
+          bibindex: (index + 1).toString(),
+          noteIndex: index,
+          citation_object: {
+            citationItems: [
+              {
+                id: cite_id,
+              },
+            ],
+            properties: {
+              noteIndex: index,
             },
-          ],
-          properties: {
-            noteIndex: index, // Use index directly (0-based is fine, but must be sequential)
           },
-        };
-
-        // add in the citation and bibliography fetch the citation. In
-        // this case, the citation to be included is hard coded.
-
-        // TODO the citation object returned may include errors which we
-        // haven't checked for here.
-        task_queue.push(function () {
-          var cite_id = kcite_element.attr("kcite-id");
-          var cite = sys.retrieveItem(cite_id);
-          var bibindex = (index + 1).toString();
-          console.log("Generating citation for:", cite);
-
-          // Use citeproc.js built-in functionality to generate citation
-          var citation_result = citeproc.appendCitationCluster(
-            citation_object,
-            true
-          );
-
-          // Extract the formatted citation from citeproc result
-          // citation_result[1] contains array of [citation_index, citation_html, citation_id]
-          var citation_html = "";
-          if (
-            citation_result &&
-            citation_result[1] &&
-            citation_result[1].length > 0
-          ) {
-            // Get the last citation (most recent one added)
-            console.log("citation_result:", citation_result[1]);
-            var last_citation =
-              citation_result[1][citation_result[1].length - 1];
-            citation_html = last_citation[1]; // The HTML is in index 1
-          }
-
-          var citation = '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
-
-          kcite_element.html(citation);
         });
       }
       // so we have an unresolved element
@@ -2617,17 +2584,48 @@ jQuery(document).ready(function ($) {
       }
     });
 
-    // we have all the IDs now, but haven't calculated the in text
-    // citations. So, we need to update citeproc to get the disambiguation
-    // correct. This should run BEFORE individual citations are processed.
-    task_queue.unshift(function () {
-      // update citeproc with all the ids we will use (which will happen
-      // when we tail recurse). this method call is a little problematic and
-      // can cause timeout with large numbers of references
+    // Process all citations in one batch to maintain correct order
+    if (citation_elements.length > 0) {
+      task_queue.push(function () {
+        console.log("Updating citeproc with cite_ids:", cite_ids);
+        citeproc.updateItems(cite_ids, true);
 
-      console.log("Updating citeproc with cite_ids:", cite_ids);
-      citeproc.updateItems(cite_ids, true);
-    });
+        // Process all citations in order
+        citation_elements.forEach(function (elem_info) {
+          console.log("Generating citation for:", elem_info.cite_id);
+
+          // Use citeproc.js built-in functionality to generate citation
+          var citation_result = citeproc.appendCitationCluster(
+            elem_info.citation_object,
+            true
+          );
+
+          // Extract the formatted citation from citeproc result
+          var citation_html = "";
+          if (
+            citation_result &&
+            citation_result[1] &&
+            citation_result[1].length > 0
+          ) {
+            console.log("citation_result:", citation_result[1]);
+            var last_citation =
+              citation_result[1][citation_result[1].length - 1];
+            citation_html = last_citation[1]; // The HTML is in index 1
+          }
+
+          // Use the formatted citation from citeproc.js, with hyperlink to bibliography
+          var citation = citation_html
+            ? '<a href="#' + elem_info.cite_id + '">' + citation_html + "</a>"
+            : '<a href="#' +
+              elem_info.cite_id +
+              '">[' +
+              elem_info.bibindex +
+              "]</a>";
+
+          elem_info.element.html(citation);
+        });
+      });
+    }
 
     var kcite_bib_element = kcite_section;
 
