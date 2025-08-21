@@ -2666,6 +2666,9 @@ kcite_style_cleaner["apa"] = function (bib_item) {
 };
 
 kcite_style_cleaner["vancouver"] = function (bib_item) {
+  // remove csl-left-margin div
+  bib_item = bib_item.replace(/<div class="csl-left-margin">.*?<\/div>/, "");
+
   // URL linkify here - supports both http and https
   var httpPos = bib_item.lastIndexOf("http://");
   var httpsPos = bib_item.lastIndexOf("https://");
