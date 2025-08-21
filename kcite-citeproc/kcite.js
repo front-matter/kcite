@@ -2234,10 +2234,188 @@ var kcite_styles = {
     </layout>
   </bibliography>
 </style>`,
+  "apa-numeric-superscript-brackets": `<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="note" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
+  <info>
+    <title>American Psychological Association 7th edition (numeric, superscript, brackets)</title>
+    <title-short>APA Numeric Superscript Brackets</title-short>
+    <id>http://www.zotero.org/styles/apa-numeric-superscript-brackets</id>
+    <link href="http://www.zotero.org/styles/apa" rel="template"/>
+    <link href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" rel="documentation"/>
+    <author>
+      <name>Brenton M. Wiernik</name>
+      <email>zotero@wiernik.org</email>
+    </author>
+    <category citation-format="numeric"/>
+    <category field="psychology"/>
+    <category field="generic-base"/>
+    <updated>2024-07-09T20:08:41+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
+  <locale xml:lang="en">
+    <terms>
+      <term name="editortranslator" form="short">
+        <single>ed. &amp; trans.</single>
+        <multiple>eds. &amp; trans.</multiple>
+      </term>
+      <term name="editor-translator" form="short">
+        <single>ed. &amp; trans.</single>
+        <multiple>eds. &amp; trans.</multiple>
+      </term>
+      <term name="translator" form="short">trans.</term>
+      <term name="interviewer" form="short">
+        <single>interviewer</single>
+        <multiple>interviewers</multiple>
+      </term>
+      <term name="collection-editor" form="short">
+        <single>ed.</single>
+        <multiple>eds.</multiple>
+      </term>
+      <term name="performer" form="verb">recorded by</term>
+      <term name="circa" form="short">ca.</term>
+      <term name="bc"> B.C.E.</term>
+      <term name="ad"> C.E.</term>
+      <term name="issue" form="long">
+        <single>issue</single>
+        <multiple>issues</multiple>
+      </term>
+      <term name="software">computer software</term>
+      <term name="at" form="long">before the</term>
+      <term name="collection">archival collection</term>
+      <term name="post">online post</term>
+      <term name="hearing" form="verb">testimony of</term>
+      <term name="review-of" form="long">review of the</term>
+      <term name="review-of" form="short">review of</term>
+    </terms>
+  </locale>
+  <macro name="author-bib">
+             <group delimiter=" ">
+      <names variable="composer" delimiter=", &amp; ">
+        <name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
+        <substitute>
+          <names variable="author"/>
+          <names variable="illustrator"/>
+          <names variable="director">
+            <name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
+            <label form="long" prefix=" (" suffix=")" text-case="title"/>
+          </names>
+          <names variable="editor">
+            <name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
+            <label form="short" prefix=" (" suffix=")" text-case="title"/>
+          </names>
+          <text macro="title"/>
+        </substitute>
+      </names>
+    </group>
+  </macro>
+  <macro name="title">
+    <choose>
+      <if type="post webpage" match="any">
+        <text variable="title" font-style="italic"/>
+      </if>
+      <else-if type="article-journal article-magazine article-newspaper periodical post-weblog review review-book" match="any">
+        <text variable="title"/>
+      </else-if>
+      <else>
+        <text variable="title" font-style="italic"/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="container">
+    <choose>
+      <if type="article-journal article-magazine article-newspaper periodical post-weblog review review-book" match="any">
+        <group delimiter=", ">
+          <text variable="container-title" font-style="italic" text-case="title"/>
+          <choose>
+            <if variable="volume">
+              <group>
+                <text variable="volume" font-style="italic"/>
+                <text variable="issue" prefix="(" suffix=")"/>
+              </group>
+            </if>
+            <else>
+              <text variable="issue" font-style="italic"/>
+            </else>
+          </choose>
+          <text variable="page"/>
+        </group>
+      </if>
+      <else-if type="chapter paper-conference" match="any">
+        <group delimiter=", ">
+          <group delimiter=" ">
+            <text term="in" text-case="capitalize-first"/>
+            <names variable="editor">
+              <name and="symbol" initialize-with=". " delimiter=", "/>
+              <label form="short" prefix=" (" suffix=")" text-case="title"/>
+            </names>
+            <text variable="container-title" font-style="italic"/>
+          </group>
+          <text variable="page" prefix="pp. "/>
+        </group>
+      </else-if>
+    </choose>
+  </macro>
+  <macro name="publisher">
+    <group delimiter=": ">
+      <text variable="publisher-place"/>
+      <text variable="publisher"/>
+    </group>
+  </macro>
+  <macro name="date">
+    <choose>
+      <if variable="issued">
+        <date variable="issued">
+          <date-part name="year"/>
+        </date>
+      </if>
+      <else>
+        <text term="no date" form="short"/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="access">
+    <choose>
+      <if variable="DOI" match="any">
+        <text variable="DOI" prefix="https://doi.org/"/>
+      </if>
+      <else-if variable="URL">
+        <text variable="URL"/>
+      </else-if>
+    </choose>
+  </macro>
+  <citation collapse="citation-number">
+    <sort>
+      <key variable="citation-number"/>
+    </sort>
+    <layout vertical-align="sup" delimiter="," prefix="[" suffix="]">
+      <text variable="citation-number"/>
+    </layout>
+  </citation>
+  <bibliography et-al-min="21" et-al-use-first="19" et-al-use-last="true" entry-spacing="0" line-spacing="2">
+    <sort>
+      <key macro="author-bib"/>
+      <key macro="date"/>
+      <key macro="title"/>
+    </sort>
+    <layout>
+      <text variable="citation-number" suffix=". "/>
+      <group delimiter=". " suffix=".">
+        <text macro="author-bib"/>
+        <group delimiter=" ">
+          <text macro="date" prefix="(" suffix=")"/>
+        </group>
+        <text macro="title"/>
+        <text macro="container"/>
+        <text macro="publisher"/>
+      </group>
+      <text macro="access" prefix=" "/>
+    </layout>
+  </bibliography>
+</style>`,
 };
 
 // Default settings - will be overridden by WordPress settings if available
-var kcite_default_style = "apa";
+var kcite_default_style = "apa-numeric-superscript-brackets";
 var kcite_default_locale = "en-US";
 
 // Load WordPress settings if available
@@ -2266,6 +2444,29 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
 kcite_style_cleaner["apa"] = function (bib_item) {
+  // URL linkify here - supports both http and https
+  var httpPos = bib_item.lastIndexOf("http://");
+  var httpsPos = bib_item.lastIndexOf("https://");
+  var urlStart = Math.max(httpPos, httpsPos);
+
+  if (urlStart === -1) {
+    return bib_item;
+  }
+
+  var url = bib_item.substring(urlStart, bib_item.length);
+
+  // Validate that we have a reasonable URL
+  if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
+    return bib_item;
+  }
+
+  // Replace the URL with a clickable link
+  return (
+    bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
+  );
+};
+
+kcite_style_cleaner["apa-numeric-superscript-brackets"] = function (bib_item) {
   // URL linkify here - supports both http and https
   var httpPos = bib_item.lastIndexOf("http://");
   var httpsPos = bib_item.lastIndexOf("https://");
@@ -2490,12 +2691,12 @@ jQuery(document).ready(function ($) {
           '<div class="kcite-style">\
 <input type="radio" name="kcite-style' +
             kcite_section_id +
-            '" checked="checked">APA</input>\
+            '" checked="checked">apa-numeric-superscript-brackets</input>\
 </div>'
         );
         style.buttonset();
 
-        // APA is the default and only style now
+        // apa-numeric-superscript-brackets is the default and only style now
         style.find(":radio").eq(0).prop("checked", "true");
 
         style.appendTo(control_inner);
