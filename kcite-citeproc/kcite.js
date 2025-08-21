@@ -2553,7 +2553,7 @@ jQuery(document).ready(function ($) {
             },
           ],
           properties: {
-            noteIndex: index - 1,
+            noteIndex: index, // Use index directly (0-based is fine, but must be sequential)
           },
         };
 
