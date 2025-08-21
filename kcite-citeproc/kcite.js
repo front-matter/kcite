@@ -272,7 +272,7 @@ var kcite_styles = {
       <name>Brenton M. Wiernik</name>
       <email>zotero@wiernik.org</email>
     </author>
-    <category citation-format="numeric"/>
+    <category citation-format="author-date"/>
     <category field="psychology"/>
     <category field="generic-base"/>
     <updated>2024-07-09T20:08:41+00:00</updated>
@@ -2357,16 +2357,30 @@ jQuery(document).ready(function ($) {
           var cite = sys.retrieveItem(cite_id);
           var bibindex = (index + 1).toString();
 
-          // the true here should mean that citeproc always
-          // returns only a single element array. It doesn't
-          // seem to work, as ambiguous cases still return more.
-          //console.log( "appending cite" );
-          var citation = citeproc.appendCitationCluster(citation_object, true);
-          //console.log( citation );
-          // citeproc's wierd return values. Last element is citation we want.
-          // last element again is the HTML.
+          // Use citeproc.js built-in functionality to generate citation
+          var citation_result = citeproc.appendCitationCluster(
+            citation_object,
+            true
+          );
 
-          var citation = '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
+          // Extract the formatted citation from citeproc result
+          // citation_result[1] contains array of [citation_index, citation_html, citation_id]
+          var citation_html = "";
+          if (
+            citation_result &&
+            citation_result[1] &&
+            citation_result[1].length > 0
+          ) {
+            // Get the last citation (most recent one added)
+            var last_citation =
+              citation_result[1][citation_result[1].length - 1];
+            citation_html = last_citation[1]; // The HTML is in index 1
+          }
+
+          // Add hyperlink to bibliography entry if citation was generated
+          var citation = citation_html
+            ? '<a href="#' + cite_id + '">' + citation_html + "</a>"
+            : '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
 
           kcite_element.html(citation);
         });
