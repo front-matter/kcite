@@ -2376,9 +2376,9 @@ jQuery(document).ready(function ($) {
         task_queue.push(function () {
           var cite_id = kcite_element.attr("kcite-id");
           var cite = sys.retrieveItem(cite_id);
-          console.log(cite);
+          console.log(sys);
 
-          var bibindex = parseInt(cite_id.split("-").pop()) + 1;
+          var bibindex = cite_id.split("-").pop();
 
           // the true here should mean that citeproc always
           // returns only a single element array. It doesn't
@@ -2393,7 +2393,7 @@ jQuery(document).ready(function ($) {
             '<a href="#' +
             cite_id +
             '">[' +
-            bibindex.toString() +
+            bibindex +
             "]</a>" +
             '<a href="' +
             cite["URL"] +
