@@ -2441,7 +2441,7 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   return (
-    '  <li class="csl-entry" style="list-style-type: none; margin-bottom: 0.5em; text-indent: -1em; padding-left: 1em;" id="' +
+    '  <li class="csl-entry" style="list-style-type: none; margin-bottom: 0.5em; text-indent: -1em;" id="' +
     this.system_id +
     '">' +
     str
@@ -2620,7 +2620,7 @@ jQuery(document).ready(function ($) {
     // we have all the IDs now, but haven't calculated the in text
     // citations. So, we need to update citeproc to get the disambiguation
     // correct.
-    task_queue.unshift(function () {
+    task_queue.push(function () {
       // update citeproc with all the ids we will use (which will happen
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
@@ -2720,8 +2720,8 @@ jQuery(document).ready(function ($) {
         return;
       }
 
-      // run next event
-      task_queue.shift()();
+      // run next event - using pop() for LIFO processing
+      task_queue.pop()();
 
       // tail-end recurse with timeout 100 gap is a compromise. If
       // this is set higher rendering takes longer on all machines, too
