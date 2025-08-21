@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: https://github.com/phillord/kcite
    Description: Add references and bibliography to blogposts
-   Version: 1.7.60
+   Version: 1.7.61
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -422,7 +422,7 @@ $content
       $script = <<<EOT
 
 <h2>References</h2>
-<ol class="kcite-bibliography csl-bib-body" style="list-style-type: none; padding-inline-start: 0;"></ol>
+<ol class="kcite-bibliography csl-bib-body" style="padding-inline-start: 0;"></ol>
 <script type="text/javascript">var citeproc_controls=false;
 var blog_home_url="$home_url"
 </script>
@@ -442,7 +442,7 @@ EOT;
 
       $i = 1;
       $bib_string = "<h2>References</h2>
-    <ol class=\"kcite-bibliography csl-bib-body\" style=\"list-style-type: none; padding-inline-start: 0;\">
+    <ol class=\"kcite-bibliography csl-bib-body\" style=\"padding-inline-start: 0;\">
     ";
       
       foreach ($pub_array as $pub) {
@@ -458,7 +458,7 @@ EOT;
               }
                           
               $bib_string .= 
-                  "<li id=\"#'$anchor\">". $source . $pub["identifier"] .
+                  "<li id=\"" . esc_attr($anchor) . "\">". $source . esc_html($pub["identifier"]) .
                   " <i>(Timed out)</i></li>\n";
               $i++;
               continue;                 
@@ -468,20 +468,19 @@ EOT;
               
               //sufficient missing to assume no publication retrieved...
               if (array_key_exists( "DOI", $pub ) && $pub['DOI']) {
-                  $bib_string .= "<li id=\"#'$anchor\"><a href='https://doi.org/".
-                      $pub['DOI']."'>DOI:".$pub['DOI'].
+                  $bib_string .= "<li id=\"" . esc_attr($anchor) . "\"><a href=\"https://doi.org/".
+                      esc_attr($pub['DOI'])."\">DOI:".esc_html($pub['DOI']).
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
               if (array_key_exists( "PMID", $pub ) && $pub['PMID']) {
-                  $bib_string .= "<li id=\"$anchor\"><a href='http://www.ncbi.nlm.nih.gov/pubmed/"
-                      .$pub['PMID']."'>PMID:".$pub['DOI'].
+                  $bib_string .= "<li id=\"" . esc_attr($anchor) . "\"><a href=\"http://www.ncbi.nlm.nih.gov/pubmed/"
+                      .esc_attr($pub['PMID'])."\">PMID:".esc_html($pub['PMID']).
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
           }
           else {
 
-              $bib_string .= "<li id=\"#'$anchor'>
-";
+              $bib_string .= "<li id=\"" . esc_attr($anchor) . "\">";
               //
               // author
               // 
@@ -493,7 +492,7 @@ EOT;
                       $author_string = "";
                       // this is how citeproc from data cite comes
                       if( array_key_exists( "literal", $author ) ){
-                          $author_string = $author["literal"] . "., ";
+                          $author_string = esc_html($author["literal"]) . "., ";
                       }
                       else{
                           //get author initials
@@ -504,7 +503,7 @@ EOT;
                               $initials .= strtoupper(substr($word,0,1)).".";
                           }
                           
-                          $author_string = $initials." ".$author['family'].", ";
+                          $author_string = $initials." ".esc_html($author['family']).", ";
                       }
                       
                       $bib_string .= $author_string;
@@ -520,17 +519,17 @@ EOT;
               // title
               //
               if (array_key_exists( "title", $pub) ){
-                  $bib_string .= '"'.$pub['title'].'"';
+                  $bib_string .= '"'.esc_html($pub['title']).'"';
               }
               if (array_key_exists("container-title", $pub) && $pub['container-title']) {
-                  $bib_string .= ', <i>'.$pub['container-title'].'</i>';
+                  $bib_string .= ', <i>'.esc_html($pub['container-title']).'</i>';
               }
               if (array_key_exists("volume", $pub)){
-                  $bib_string .= ', vol. '.$pub['volume'];
+                  $bib_string .= ', vol. '.esc_html($pub['volume']);
               }
               
               if (array_key_exists("page", $pub) ) {
-                  $bib_string .= ', pp. '.$pub['page'];
+                  $bib_string .= ', pp. '.esc_html($pub['page']);
               }
 
 
@@ -544,7 +543,7 @@ EOT;
                   }
                   
                   if(array_key_exists("raw", $pub["issued"] ) ){
-                      $bib_string .= ", " . $pub["issued"]["raw"] . ". ";
+                      $bib_string .= ", " . esc_html($pub["issued"]["raw"]) . ". ";
                   }
               }
               if (array_key_exists("URL", $pub) && $pub["URL"]) {
