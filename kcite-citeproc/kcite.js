@@ -1789,219 +1789,832 @@ var kcite_styles = {
         <text variable="DOI" prefix="https://doi.org/"/>
       </if>
       <else-if variable="URL">
-        <text variable="URL"/>
+        <group delimiter=" ">
+          <choose>
+            <if variable="issued status" match="none">
+              <group delimiter=" ">
+                <text term="retrieved" text-case="capitalize-first"/>
+                <date variable="accessed" form="text" suffix=","/>
+                <text term="from"/>
+              </group>
+            </if>
+          </choose>
+          <text variable="URL"/>
+        </group>
       </else-if>
     </choose>
   </macro>
-  <citation collapse="citation-number">
-    <sort>
-      <key variable="citation-number"/>
-    </sort>
-    <layout vertical-align="sup" delimiter="," prefix="[" suffix="]">
-      <text variable="citation-number"/>
-    </layout>
-  </citation>
-  <bibliography et-al-min="21" et-al-use-first="19" et-al-use-last="true" entry-spacing="0" line-spacing="2">
-    <sort>
-      <key macro="author-bib"/>
-      <key macro="date"/>
-      <key macro="title"/>
-    </sort>
-    <layout>
-      <text variable="citation-number" suffix=". "/>
-      <group delimiter=". " suffix=".">
-        <text macro="author-bib"/>
-        <group delimiter=" ">
-          <text macro="date" prefix="(" suffix=")"/>
-        </group>
-        <text macro="title"/>
-        <text macro="container"/>
-        <text macro="publisher"/>
-      </group>
-      <text macro="access" prefix=" "/>
-    </layout>
-  </bibliography>
-</style>`,
-  "apa-numeric-superscript-brackets": `<?xml version="1.0" encoding="utf-8"?>
-<style xmlns="http://purl.org/net/xbiblio/csl" class="note" version="1.0" demote-non-dropping-particle="never" page-range-format="expanded">
-  <info>
-    <title>American Psychological Association 7th edition (numeric, superscript, brackets)</title>
-    <title-short>APA Numeric Superscript Brackets</title-short>
-    <id>http://www.zotero.org/styles/apa-numeric-superscript-brackets</id>
-    <link href="http://www.zotero.org/styles/apa" rel="template"/>
-    <link href="https://apastyle.apa.org/style-grammar-guidelines/references/examples" rel="documentation"/>
-    <author>
-      <name>Brenton M. Wiernik</name>
-      <email>zotero@wiernik.org</email>
-    </author>
-    <category citation-format="numeric"/>
-    <category field="psychology"/>
-    <category field="generic-base"/>
-    <updated>2024-07-09T20:08:41+00:00</updated>
-    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
-  </info>
-  <locale xml:lang="en">
-    <terms>
-      <term name="editortranslator" form="short">
-        <single>ed. &amp; trans.</single>
-        <multiple>eds. &amp; trans.</multiple>
-      </term>
-      <term name="editor-translator" form="short">
-        <single>ed. &amp; trans.</single>
-        <multiple>eds. &amp; trans.</multiple>
-      </term>
-      <term name="translator" form="short">trans.</term>
-      <term name="interviewer" form="short">
-        <single>interviewer</single>
-        <multiple>interviewers</multiple>
-      </term>
-      <term name="collection-editor" form="short">
-        <single>ed.</single>
-        <multiple>eds.</multiple>
-      </term>
-      <term name="performer" form="verb">recorded by</term>
-      <term name="circa" form="short">ca.</term>
-      <term name="bc"> B.C.E.</term>
-      <term name="ad"> C.E.</term>
-      <term name="issue" form="long">
-        <single>issue</single>
-        <multiple>issues</multiple>
-      </term>
-      <term name="software">computer software</term>
-      <term name="at" form="long">before the</term>
-      <term name="collection">archival collection</term>
-      <term name="post">online post</term>
-      <term name="hearing" form="verb">testimony of</term>
-      <term name="review-of" form="long">review of the</term>
-      <term name="review-of" form="short">review of</term>
-    </terms>
-  </locale>
-  <macro name="author-bib">
-                                                 <group delimiter=" ">
-      <names variable="composer" delimiter=", &amp; ">
-        <name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
-        <substitute>
-          <names variable="author"/>
-          <names variable="illustrator"/>
-          <names variable="director">
-            <name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
-            <label form="long" prefix=" (" suffix=")" text-case="title"/>
-          </names>
-          <names variable="editor">
-            <name name-as-sort-order="all" and="symbol" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="always"/>
-            <label form="short" prefix=" (" suffix=")" text-case="title"/>
-          </names>
-          <text macro="title"/>
-        </substitute>
-      </names>
-    </group>
-  </macro>
-  <macro name="title">
+  <macro name="event">
     <choose>
-      <if type="post webpage" match="any">
-        <text variable="title" font-style="italic"/>
+      <if variable="event event-title" match="any">
+        <!-- To prevent Zotero from printing event-place due to its double-mapping of all 'place' to
+             both publisher-place and event-place. Remove this 'choose' when that is changed. -->
+        <choose>
+          <if type="paper-conference">
+            <choose>
+              <if variable="collection-editor compiler editor editorial-director issue page volume" match="none">
+                <!-- Don't print event info for conference papers published in a proceedings -->
+                <group delimiter=", ">
+                  <text macro="event-title"/>
+                  <text variable="event-place"/>
+                </group>
+              </if>
+            </choose>
+          </if>
+          <else>
+            <!-- For other item types, print event info even if published (e.g., for collection catalogs, performance programs.
+                 These items aren't given explicit examples in the APA manual, so err on the side of providing too much information. -->
+            <group delimiter=", ">
+              <text macro="event-title"/>
+              <text variable="event-place"/>
+            </group>
+          </else>
+        </choose>
       </if>
-      <else-if type="article-journal article-magazine article-newspaper periodical post-weblog review review-book" match="any">
-        <text variable="title"/>
-      </else-if>
+    </choose>
+  </macro>
+  <macro name="event-title">
+    <choose>
+      <!-- TODO: We expect "event-title" to be used,
+           but processors and applications may not be updated yet.
+           This macro ensures that either "event" or "event-title" can be accpeted.
+           Remove if procesor logic and application adoption can handle this. -->
+      <if variable="event-title">
+        <text variable="event-title"/>
+      </if>
       <else>
-        <text variable="title" font-style="italic"/>
+        <text variable="event"/>
       </else>
     </choose>
   </macro>
-  <macro name="container">
+  <!-- After 'source', APA also prints publication history (original publication, reprint info, retraction info) -->
+  <macro name="publication-history">
     <choose>
-      <if type="article-journal article-magazine article-newspaper periodical post-weblog review review-book" match="any">
-        <group delimiter=", ">
-          <text variable="container-title" font-style="italic" text-case="title"/>
+      <if type="patent">
+        <text variable="references" prefix="(" suffix=")"/>
+      </if>
+      <else>
+        <group delimiter="; " prefix="(" suffix=")">
+          <!-- Print status here for things like "retracted" if it's not printed elsewhere already. -->
           <choose>
-            <if variable="volume">
-              <group>
-                <text variable="volume" font-style="italic"/>
-                <text variable="issue" prefix="(" suffix=")"/>
+            <if variable="issued">
+              <choose>
+                <if variable="issue number page volume" match="any">
+                  <text variable="status" text-case="capitalize-first"/>
+                </if>
+              </choose>
+            </if>
+          </choose>
+          <choose>
+            <if variable="references">
+              <!-- This provides the option for more elaborate description
+                    of publication history, such as full "reprinted" references
+                    (examples 11, 43, 44) -->
+              <text variable="references"/>
+            </if>
+            <else>
+              <group delimiter=" ">
+                <text term="original-work-published" text-case="capitalize-first"/>
+                <choose>
+                  <if is-uncertain-date="original-date">
+                    <text term="circa" form="short"/>
+                  </if>
+                </choose>
+                <date variable="original-date">
+                  <date-part name="year"/>
+                </date>
+              </group>
+            </else>
+          </choose>
+        </group>
+      </else>
+    </choose>
+  </macro>
+  <!-- Legal citations have their own rules -->
+  <macro name="legal-cites">
+    <!-- treaty: for treaties -->
+    <!-- legal_case: for all legal and court cases -->
+    <!-- bill: for bills, resolutions, federal reports -->
+    <!-- hearing: for hearings and testimony -->
+    <!-- legislation: for statutes, constitutional items, and charters -->
+    <!-- regulation: codified regulations, uncodified regulations, executive orders -->
+    <group delimiter=" ">
+      <choose>
+        <if type="treaty">
+          <group delimiter=", " suffix=".">
+            <!-- APA generally defers to Bluebook for legal citations, but diverges without
+                explanation for treaty items. We follow the Bluebook format that was used 
+                in APA 6th ed. -->
+            <!-- APA manual omits treaty parties/authors, but per Bluebook 
+                they should be included at least for bilateral treaties. -->
+            <names variable="author">
+              <name initialize-with="." form="short" delimiter="-"/>
+            </names>
+            <text macro="date-legal"/>
+            <!-- APA manual omits treaty source/report called for by Bluebook in favor of just URL. 
+                Both are included here, following the APA style used for all other item types 
+                to end the reference with a period, then give the URL afterward. -->
+            <text macro="container-legal"/>
+          </group>
+        </if>
+        <else>
+          <group delimiter=" " suffix=".">
+            <group delimiter=", ">
+              <text macro="title-legal"/>
+              <text macro="container-legal"/>
+            </group>
+            <text macro="date-legal"/>
+            <text macro="parenthetical-legal"/>
+          </group>
+        </else>
+      </choose>
+      <text variable="references"/>
+      <text macro="access"/>
+    </group>
+  </macro>
+  <macro name="title-legal">
+    <choose>
+      <if type="bill legal_case legislation regulation treaty" match="any">
+        <text variable="title" text-case="title"/>
+      </if>
+      <else-if type="hearing">
+        <!-- APA uses a comma delimiter and omits "hearing before the" for hearings with testimony, 
+             but follows Bluebook rules (colon delimiter, prefix before the committee name) for
+             references to the whole hearing. We simply follow the Bluebook rules for both, but
+             use APA style capitalization (not capitalizing "Before" or the title of the hearing). -->
+        <group delimiter=": " font-style="italic">
+          <text variable="title" text-case="capitalize-first"/>
+          <group delimiter=" ">
+            <text term="hearing" form="long" text-case="capitalize-first"/>
+            <group delimiter=" ">
+              <group delimiter=" ">
+                <!-- APA manual omits the bill number, but it should be included per Bluebook if relevant -->
+                <text term="on"/>
+                <text variable="number"/>
+              </group>
+              <group delimiter=" ">
+                <!-- Use the at term to hold "before the" -->
+                <text term="at" form="long"/>
+                <text variable="section"/>
+              </group>
+            </group>
+          </group>
+        </group>
+      </else-if>
+    </choose>
+  </macro>
+  <macro name="date-legal">
+    <choose>
+      <if type="treaty">
+        <date variable="issued" form="text"/>
+      </if>
+      <else-if type="legal_case">
+        <group prefix="(" suffix=")" delimiter=" ">
+          <text variable="authority"/>
+          <choose>
+            <if variable="container-title" match="any">
+              <!-- Print only year for cases published in reporters-->
+              <date variable="issued" form="numeric" date-parts="year"/>
+            </if>
+            <else>
+              <!-- APA manual doesn't include examples of cases not yet
+                   published in a reporter, but this is Bluebook style. -->
+              <date variable="issued" form="text"/>
+            </else>
+          </choose>
+        </group>
+      </else-if>
+      <else-if type="bill hearing legislation regulation" match="any">
+        <group prefix="(" suffix=")" delimiter=" ">
+          <group delimiter=" ">
+            <date variable="original-date">
+              <date-part name="year"/>
+            </date>
+            <text term="and" form="symbol"/>
+          </group>
+          <choose>
+            <if variable="issued">
+              <!-- APA manual includes "rev." before the revision year, 
+                   but this isn't part of the Bluebook rules. -->
+              <date variable="issued">
+                <date-part name="year"/>
+              </date>
+            </if>
+            <else>
+              <!-- Show proposal date for uncodified regualtions. 
+                   Assume date is entered literally ala "proposed May 23, 2016".
+                   TODO: Add 'proposed' term here if that becomes available -->
+              <date variable="submitted" form="text"/>
+            </else>
+          </choose>
+        </group>
+      </else-if>
+    </choose>
+  </macro>
+  <macro name="container-legal">
+    <!-- Expect legal item container-titles to be stored in short form -->
+    <choose>
+      <if type="treaty">
+        <group delimiter=" ">
+          <number variable="volume"/>
+          <text variable="container-title"/>
+          <choose>
+            <if variable="page page-first" match="any">
+              <text variable="page-first"/>
+            </if>
+            <else>
+              <group delimiter=" ">
+                <label variable="number" form="short" text-case="capitalize-first"/>
+                <text variable="number"/>
+              </group>
+            </else>
+          </choose>
+        </group>
+      </if>
+      <else-if type="legal_case">
+        <group delimiter=" ">
+          <choose>
+            <if variable="container-title">
+              <group delimiter=" ">
+                <text variable="volume"/>
+                <text variable="container-title"/>
+                <group delimiter=" ">
+                  <label variable="section" form="symbol"/>
+                  <text variable="section"/>
+                </group>
+                <choose>
+                  <if variable="page page-first" match="any">
+                    <text variable="page-first"/>
+                  </if>
+                  <else>
+                    <text value="___"/>
+                  </else>
+                </choose>
               </group>
             </if>
             <else>
-              <text variable="issue" font-style="italic"/>
+              <group delimiter=" ">
+                <label variable="number" form="short" text-case="capitalize-first"/>
+                <text variable="number"/>
+              </group>
             </else>
           </choose>
-          <text variable="page"/>
         </group>
-      </if>
-      <else-if type="chapter paper-conference" match="any">
+      </else-if>
+      <else-if type="bill">
         <group delimiter=", ">
           <group delimiter=" ">
-            <text term="in" text-case="capitalize-first"/>
-            <names variable="editor">
-              <name and="symbol" initialize-with=". " delimiter=", "/>
-              <label form="short" prefix=" (" suffix=")" text-case="title"/>
-            </names>
-            <text variable="container-title" font-style="italic"/>
+            <text variable="genre"/>
+            <group delimiter=" ">
+              <choose>
+                <!-- If there is no session number or code/record title, assume
+                     assume the item is a congressional report and include 'No.' term. -->
+                <if variable="chapter-number container-title" match="none">
+                  <!-- The item is a congressional report, rather than a bill or resultion. -->
+                  <label variable="number" form="short" text-case="capitalize-first"/>
+                </if>
+              </choose>
+              <text variable="number"/>
+            </group>
           </group>
-          <text variable="page" prefix="pp. "/>
+          <group delimiter=" ">
+            <text variable="authority"/>
+            <!-- 'session' is chapter-number -->
+            <text variable="chapter-number"/>
+          </group>
+          <group delimiter=" ">
+            <text variable="volume"/>
+            <text variable="container-title"/>
+            <text variable="page-first"/>
+          </group>
+        </group>
+      </else-if>
+      <else-if type="hearing">
+        <group delimiter=" ">
+          <text variable="authority"/>
+          <!-- 'session' is chapter-number -->
+          <text variable="chapter-number"/>
+        </group>
+      </else-if>
+      <else-if type="legislation">
+        <choose>
+          <if variable="number">
+            <!-- There's a public law number. -->
+            <group delimiter=", ">
+              <text variable="number" prefix="Pub. L. No. "/>
+              <group delimiter=" ">
+                <text variable="volume"/>
+                <text variable="container-title"/>
+                <text variable="page-first"/>
+              </group>
+            </group>
+          </if>
+          <else>
+            <group delimiter=" ">
+              <text variable="volume"/>
+              <text variable="container-title"/>
+              <choose>
+                <if variable="section">
+                  <group delimiter=" ">
+                    <label variable="section" form="symbol"/>
+                    <text variable="section"/>
+                  </group>
+                </if>
+                <else>
+                  <text variable="page-first"/>
+                </else>
+              </choose>
+            </group>
+          </else>
+        </choose>
+      </else-if>
+      <else-if type="regulation">
+        <group delimiter=", ">
+          <group delimiter=" ">
+            <text variable="genre"/>
+            <group delimiter=" ">
+              <label variable="number" form="short" text-case="capitalize-first"/>
+              <text variable="number"/>
+            </group>
+          </group>
+          <group delimiter=" ">
+            <text variable="volume"/>
+            <text variable="container-title"/>
+            <choose>
+              <if variable="section">
+                <group delimiter=" ">
+                  <label variable="section" form="symbol"/>
+                  <text variable="section"/>
+                </group>
+              </if>
+              <else>
+                <text variable="page-first"/>
+              </else>
+            </choose>
+          </group>
         </group>
       </else-if>
     </choose>
   </macro>
-  <macro name="publisher">
-    <group delimiter=": ">
-      <text variable="publisher-place"/>
-      <text variable="publisher"/>
+  <macro name="parenthetical-legal">
+    <choose>
+      <if type="hearing">
+        <group prefix="(" suffix=")" delimiter=" ">
+          <!-- Use the 'verb' form of the hearing term to hold 'testimony of' -->
+          <text term="hearing" form="verb"/>
+          <names variable="author">
+            <name and="symbol" delimiter=", "/>
+          </names>
+        </group>
+      </if>
+      <else-if type="bill legislation regulation" match="any">
+        <!-- For uncodified regulations, assume future code section is in status. -->
+        <text variable="status" prefix="(" suffix=")"/>
+      </else-if>
+    </choose>
+  </macro>
+  <macro name="citation-locator">
+    <!-- Abbreviate page and paragraph, leave other locator labels in long form, cf. Rule 8.13 -->
+    <group delimiter=" ">
+      <choose>
+        <if locator="page paragraph" match="any">
+          <label variable="locator" form="short"/>
+        </if>
+        <else>
+          <label variable="locator" text-case="capitalize-first"/>
+        </else>
+      </choose>
+      <text variable="locator"/>
     </group>
   </macro>
-  <macro name="date">
+  <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year" givenname-disambiguation-rule="primary-name-with-initials">
+    <sort>
+      <key macro="author-sort" names-min="3" names-use-first="1"/>
+      <key macro="date-sort-group" sort="ascending"/>
+      <key macro="date-sort" sort="ascending"/>
+      <key variable="status"/>
+    </sort>
+    <layout prefix="(" suffix=")" delimiter="; ">
+      <group delimiter=", ">
+        <text macro="author-intext"/>
+        <text macro="date-intext"/>
+        <text macro="citation-locator"/>
+      </group>
+    </layout>
+  </citation>
+  <bibliography hanging-indent="true" et-al-min="21" et-al-use-first="19" et-al-use-last="true" entry-spacing="0" line-spacing="2">
+    <sort>
+      <key macro="author-sort"/>
+      <key macro="date-sort-group" sort="ascending"/>
+      <key macro="date-sort" sort="ascending"/>
+      <key variable="status"/>
+      <key macro="title"/>
+    </sort>
+    <layout>
+      <choose>
+        <if type="bill hearing legal_case legislation regulation treaty" match="any">
+          <!-- Legal items have different orders and delimiters -->
+          <text macro="legal-cites"/>
+        </if>
+        <else>
+          <group delimiter=" ">
+            <group delimiter=". " suffix=".">
+              <text macro="author-bib"/>
+              <text macro="date-bib"/>
+              <text macro="title-and-descriptions"/>
+              <text macro="container"/>
+              <text macro="event"/>
+              <text macro="publisher"/>
+            </group>
+            <text macro="access"/>
+            <text macro="publication-history"/>
+          </group>
+        </else>
+      </choose>
+    </layout>
+  </bibliography>
+</style>`,
+  vancouver: `<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" class="in-text" version="1.0" demote-non-dropping-particle="sort-only" initialize-with-hyphen="false" page-range-format="minimal">
+  <info>
+    <title>Vancouver</title>
+    <id>http://www.zotero.org/styles/vancouver</id>
+    <link href="http://www.zotero.org/styles/vancouver" rel="self"/>
+    <link href="http://www.nlm.nih.gov/bsd/uniform_requirements.html" rel="documentation"/>
+    <author>
+      <name>Michael Berkowitz</name>
+      <email>mberkowi@gmu.edu</email>
+    </author>
+    <contributor>
+      <name>Sean Takats</name>
+      <email>stakats@gmu.edu</email>
+    </contributor>
+    <contributor>
+      <name>Sebastian Karcher</name>
+    </contributor>
+    <category citation-format="numeric"/>
+    <category field="generic-base"/>
+    <category field="medicine"/>
+    <summary>Vancouver style as outlined by International Committee of Medical Journal Editors Uniform Requirements for Manuscripts Submitted to Biomedical Journals: Sample References</summary>
+    <updated>2022-09-28T11:33:04+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
+  </info>
+  <locale xml:lang="en">
+    <date form="text" delimiter=" ">
+      <date-part name="year"/>
+      <date-part name="month" form="short" strip-periods="true"/>
+      <date-part name="day"/>
+    </date>
+    <terms>
+      <term name="collection-editor" form="long">
+        <single>editor</single>
+        <multiple>editors</multiple>
+      </term>
+      <term name="presented at">presented at</term>
+      <term name="available at">available from</term>
+      <term name="section" form="short">sect.</term>
+    </terms>
+  </locale>
+  <locale xml:lang="fr">
+    <date form="text" delimiter=" ">
+      <date-part name="day"/>
+      <date-part name="month" form="short" strip-periods="true"/>
+      <date-part name="year"/>
+    </date>
+  </locale>
+  <macro name="author">
+    <names variable="author">
+      <name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/>
+      <label form="long" prefix=", "/>
+      <substitute>
+        <text macro="webpage-title"/>
+        <names variable="editor"/>
+      </substitute>
+    </names>
+  </macro>
+  <macro name="editor">
+    <names variable="editor" suffix=".">
+      <name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/>
+      <label form="long" prefix=", "/>
+    </names>
+  </macro>
+  <macro name="chapter-marker">
     <choose>
-      <if variable="issued">
-        <date variable="issued">
-          <date-part name="year"/>
-        </date>
+      <if type="chapter paper-conference entry-dictionary entry-encyclopedia" match="any">
+        <text term="in" text-case="capitalize-first"/>
       </if>
-      <else>
-        <text term="no date" form="short"/>
-      </else>
+    </choose>
+  </macro>
+  <macro name="webpage-title">
+    <!--If a webpage has a container, we're assuming the citation is "part of a website" as per ch. 25 Citing Medicine https://www.ncbi.nlm.nih.gov/books/NBK7274/?report=reader -->
+    <choose>
+      <if type="webpage" variable="container-title" match="all">
+        <group delimiter=" ">
+          <text variable="container-title"/>
+          <text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/>
+        </group>
+      </if>
+    </choose>
+  </macro>
+  <macro name="publisher">
+    <choose>
+      <!--discard publisher info for articles-->
+      <if type="article-journal article-magazine article-newspaper" match="none">
+        <group delimiter=": " suffix=";">
+          <choose>
+            <if type="thesis">
+              <text variable="publisher-place" prefix="[" suffix="]"/>
+            </if>
+            <else-if type="speech"/>
+            <else>
+              <text variable="publisher-place"/>
+            </else>
+          </choose>
+          <text variable="publisher"/>
+        </group>
+      </if>
     </choose>
   </macro>
   <macro name="access">
     <choose>
-      <if variable="DOI" match="any">
-        <text variable="DOI" prefix="https://doi.org/"/>
+      <if variable="URL">
+        <group delimiter=": ">
+          <text term="available at" text-case="capitalize-first"/>
+          <text variable="URL"/>
+        </group>
       </if>
-      <else-if variable="URL">
-        <text variable="URL"/>
+    </choose>
+  </macro>
+  <macro name="accessed-date">
+    <choose>
+      <if variable="URL">
+        <group prefix="[" suffix="]" delimiter=" ">
+          <text term="cited" text-case="lowercase"/>
+          <date variable="accessed" form="text"/>
+        </group>
+      </if>
+    </choose>
+  </macro>
+  <macro name="container-title">
+    <choose>
+      <if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="any">
+        <group suffix="." delimiter=" ">
+          <choose>
+            <if type="article-journal review review-book" match="any">
+              <text variable="container-title" form="short" strip-periods="true"/>
+            </if>
+            <else>
+              <text variable="container-title" strip-periods="true"/>
+            </else>
+          </choose>
+          <choose>
+            <if variable="URL">
+              <text term="internet" prefix="[" suffix="]" text-case="capitalize-first"/>
+            </if>
+          </choose>
+        </group>
+        <text macro="edition" prefix=" "/>
+      </if>
+      <!--add event-name and event-place once they become available-->
+      <else-if type="bill legislation" match="any">
+        <group delimiter=", ">
+          <group delimiter=". ">
+            <text variable="container-title"/>
+            <group delimiter=" ">
+              <text term="section" form="short" text-case="capitalize-first"/>
+              <text variable="section"/>
+            </group>
+          </group>
+          <text variable="number"/>
+        </group>
       </else-if>
+      <else-if type="speech">
+        <group delimiter=": " suffix=";">
+          <group delimiter=" ">
+            <text variable="genre" text-case="capitalize-first"/>
+            <text term="presented at"/>
+          </group>
+          <text variable="event"/>
+        </group>
+      </else-if>
+      <else>
+        <group delimiter=", " suffix=".">
+          <choose>
+            <if variable="collection-title" match="none">
+              <group delimiter=" ">
+                <label variable="volume" form="short" text-case="capitalize-first"/>
+                <text variable="volume"/>
+              </group>
+            </if>
+          </choose>
+          <text variable="container-title"/>
+        </group>
+      </else>
+    </choose>
+  </macro>
+  <macro name="title">
+    <choose>
+      <if type="webpage" variable="container-title" match="all"/>
+      <else>
+        <text variable="title"/>
+        <choose>
+          <if type="article-journal article-magazine chapter paper-conference article-newspaper review review-book entry-dictionary entry-encyclopedia" match="none">
+            <choose>
+              <if variable="URL">
+                <text term="internet" prefix=" [" suffix="]" text-case="capitalize-first"/>
+              </if>
+            </choose>
+            <text macro="edition" prefix=". "/>
+          </if>
+        </choose>
+      </else>
+    </choose>
+    <choose>
+      <if type="thesis">
+        <text variable="genre" prefix=" [" suffix="]"/>
+      </if>
+    </choose>
+  </macro>
+  <macro name="edition">
+    <choose>
+      <if is-numeric="edition">
+        <group delimiter=" ">
+          <number variable="edition" form="ordinal"/>
+          <text term="edition" form="short"/>
+        </group>
+      </if>
+      <else>
+        <text variable="edition" suffix="."/>
+      </else>
+    </choose>
+  </macro>
+  <macro name="date">
+    <choose>
+      <if type="article-journal article-magazine article-newspaper review review-book" match="any">
+        <group suffix=";" delimiter=" ">
+          <date variable="issued" form="text"/>
+          <text macro="accessed-date"/>
+        </group>
+      </if>
+      <else-if type="bill legislation" match="any">
+        <group delimiter=", ">
+          <date variable="issued" delimiter=" ">
+            <date-part name="month" form="short" strip-periods="true"/>
+            <date-part name="day"/>
+          </date>
+          <date variable="issued">
+            <date-part name="year"/>
+          </date>
+        </group>
+      </else-if>
+      <else-if type="report">
+        <date variable="issued" delimiter=" ">
+          <date-part name="year"/>
+          <date-part name="month" form="short" strip-periods="true"/>
+        </date>
+        <text macro="accessed-date" prefix=" "/>
+      </else-if>
+      <else-if type="patent">
+        <group suffix=".">
+          <group delimiter=", ">
+            <text variable="number"/>
+            <date variable="issued">
+              <date-part name="year"/>
+            </date>
+          </group>
+          <text macro="accessed-date" prefix=" "/>
+        </group>
+      </else-if>
+      <else-if type="speech">
+        <group delimiter="; ">
+          <group delimiter=" ">
+            <date variable="issued" delimiter=" ">
+              <date-part name="year"/>
+              <date-part name="month" form="short" strip-periods="true"/>
+              <date-part name="day"/>
+            </date>
+            <text macro="accessed-date"/>
+          </group>
+          <text variable="event-place"/>
+        </group>
+      </else-if>
+      <else>
+        <group suffix=".">
+          <date variable="issued">
+            <date-part name="year"/>
+          </date>
+          <text macro="accessed-date" prefix=" "/>
+        </group>
+      </else>
+    </choose>
+  </macro>
+  <macro name="pages">
+    <choose>
+      <if type="article-journal article-magazine article-newspaper review review-book" match="any">
+        <text variable="page" prefix=":"/>
+      </if>
+      <else-if type="book" match="any">
+        <text variable="number-of-pages" prefix=" "/>
+        <choose>
+          <if is-numeric="number-of-pages">
+            <label variable="number-of-pages" form="short" prefix=" " plural="never"/>
+          </if>
+        </choose>
+      </else-if>
+      <else>
+        <group prefix=" " delimiter=" ">
+          <label variable="page" form="short" plural="never"/>
+          <text variable="page"/>
+        </group>
+      </else>
+    </choose>
+  </macro>
+  <macro name="journal-location">
+    <choose>
+      <if type="article-journal article-magazine review review-book" match="any">
+        <text variable="volume"/>
+        <text variable="issue" prefix="(" suffix=")"/>
+      </if>
+    </choose>
+  </macro>
+  <macro name="webpage-part">
+    <choose>
+      <if type="webpage" variable="container-title" match="all">
+        <text variable="title"/>
+      </if>
+    </choose>
+  </macro>
+  <macro name="collection-details">
+    <choose>
+      <if type="article-journal article-magazine article-newspaper review review-book" match="none">
+        <choose>
+          <if variable="collection-title">
+            <group delimiter=" " prefix="(" suffix=")">
+              <names variable="collection-editor" suffix=".">
+                <name sort-separator=" " initialize-with="" name-as-sort-order="all" delimiter=", " delimiter-precedes-last="always"/>
+                <label form="long" prefix=", "/>
+              </names>
+              <group delimiter="; ">
+                <text variable="collection-title"/>
+                <group delimiter=" ">
+                  <label variable="volume" form="short"/>
+                  <text variable="volume"/>
+                </group>
+              </group>
+            </group>
+          </if>
+        </choose>
+      </if>
+    </choose>
+  </macro>
+  <macro name="report-details">
+    <choose>
+      <if type="report">
+        <text variable="number" prefix="Report No.: "/>
+      </if>
     </choose>
   </macro>
   <citation collapse="citation-number">
     <sort>
       <key variable="citation-number"/>
     </sort>
-    <layout vertical-align="sup" delimiter="," prefix="[" suffix="]">
+    <layout prefix="(" suffix=")" delimiter=",">
       <text variable="citation-number"/>
     </layout>
   </citation>
-  <bibliography et-al-min="21" et-al-use-first="19" et-al-use-last="true" entry-spacing="0" line-spacing="2">
-    <sort>
-      <key macro="author-bib"/>
-      <key macro="date"/>
-      <key macro="title"/>
-    </sort>
+  <bibliography et-al-min="7" et-al-use-first="6" second-field-align="flush">
     <layout>
-      <text variable="citation-number" suffix=". "/>
-      <group delimiter=". " suffix=".">
-        <text macro="author-bib"/>
-        <group delimiter=" ">
-          <text macro="date" prefix="(" suffix=")"/>
-        </group>
+      <text variable="citation-number" suffix="."/>
+      <group delimiter=". " suffix=". ">
+        <text macro="author"/>
         <text macro="title"/>
-        <text macro="container"/>
-        <text macro="publisher"/>
       </group>
-      <text macro="access" prefix=" "/>
+      <group delimiter=" " suffix=". ">
+        <group delimiter=": ">
+          <text macro="chapter-marker"/>
+          <group delimiter=" ">
+            <text macro="editor"/>
+            <text macro="container-title"/>
+          </group>
+        </group>
+        <text macro="publisher"/>
+        <group>
+          <text macro="date"/>
+          <text macro="journal-location"/>
+          <text macro="pages"/>
+        </group>
+        <text macro="webpage-part"/>
+      </group>
+      <text macro="collection-details" suffix=". "/>
+      <text macro="report-details" suffix=". "/>
+      <text macro="access"/>
     </layout>
   </bibliography>
 </style>`,
 };
-var kcite_default_style = "apa-numeric-superscript-brackets";
+
+// Default settings - will be overridden by WordPress settings if available
+var kcite_default_style = "vancouver";
 var kcite_default_locale = "en-US";
 
 // Load WordPress settings if available
@@ -2052,7 +2665,10 @@ kcite_style_cleaner["apa"] = function (bib_item) {
   );
 };
 
-kcite_style_cleaner["apa-numeric-superscript-brackets"] = function (bib_item) {
+kcite_style_cleaner["vancouver"] = function (bib_item) {
+  // remove csl-left-margin div
+  bib_item = bib_item.replace(/<div class="csl-left-margin">.*?<\/div>/, "");
+
   // URL linkify here - supports both http and https
   var httpPos = bib_item.lastIndexOf("http://");
   var httpsPos = bib_item.lastIndexOf("https://");
@@ -2072,6 +2688,27 @@ kcite_style_cleaner["apa-numeric-superscript-brackets"] = function (bib_item) {
   // Replace the URL with a clickable link
   return (
     bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
+  );
+};
+
+kcite_style_cleaner["nature"] = function (bib_item) {
+  //return bib_item;
+  var start_url = bib_item.lastIndexOf("&#60;");
+  var end_url = bib_item.lastIndexOf("&#62;");
+  if (start_url == -1 || end_url == -1) {
+    return bib_item;
+  }
+  // skip entity
+  var start_url = start_url + 5;
+  var url = bib_item.substring(start_url, end_url);
+  return (
+    bib_item.substring(0, start_url) +
+    '<a href="' +
+    url +
+    '">' +
+    url +
+    "</a>" +
+    bib_item.substring(end_url)
   );
 };
 
@@ -2121,6 +2758,7 @@ jQuery(document).ready(function ($) {
 
       if (cite["resolved"]) {
         cite_ids.shift(cite_id);
+        //console.log( "push cite_id" + cite_id );
         // check here whether resolved == true before proceeding.
         var citation_object = {
           citationItems: [
@@ -2141,39 +2779,28 @@ jQuery(document).ready(function ($) {
         task_queue.push(function () {
           var cite_id = kcite_element.attr("kcite-id");
           var cite = sys.retrieveItem(cite_id);
+          var bibindex = (index + 1).toString();
 
           // the true here should mean that citeproc always
           // returns only a single element array. It doesn't
           // seem to work, as ambiguous cases still return more.
+          //console.log( "appending cite" );
           var citation = citeproc.appendCitationCluster(citation_object, true);
+          //console.log( citation );
+          // citeproc's wierd return values. Last element is citation we want.
+          // last element again is the HTML.
 
-          // For numeric styles, use the actual citation output from citeproc
-          if (kcite_default_style === "apa-numeric-superscript-brackets") {
-            var citation_text = citation[0][1];
-            var citation_html =
-              '<a href="#' +
-              cite_id +
-              '">' +
-              citation_text +
-              "</a>" +
-              '<a href="' +
-              cite["URL"] +
-              '">*</a>';
-            kcite_element.html(citation_html);
-          } else {
-            // Legacy format for other styles
-            var bibindex = (index + 1).toString();
-            var citation_html =
-              '<a href="#' +
-              cite_id +
-              '">[' +
-              bibindex +
-              "]</a>" +
-              '<a href="' +
-              cite["URL"] +
-              '">*</a>';
-            kcite_element.html(citation_html);
-          }
+          var citation =
+            '<a href="#' +
+            cite_id +
+            '">[' +
+            bibindex +
+            "]</a>" +
+            '<a href="' +
+            cite["URL"] +
+            '">*</a>';
+
+          kcite_element.html(citation);
         });
       }
       // so we have an unresolved element
@@ -2206,6 +2833,8 @@ jQuery(document).ready(function ($) {
       // update citeproc with all the ids we will use (which will happen
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
+
+      //console.log( "update items with true" );
       citeproc.updateItems(cite_ids, true);
     });
 
@@ -2245,9 +2874,10 @@ jQuery(document).ready(function ($) {
 
       // dump the bibliography into the document
       kcite_bib_element.find(".kcite-bibliography").html(bib_string);
+      var section_id;
 
       // switch on or off from kcite.php
-      if (typeof citeproc_controls !== "undefined" && citeproc_controls) {
+      if (citeproc_controls) {
         // set up main div elements
         var control_outer = $(
           '<div class="kcite-bibliography-control-outer"></div>'
@@ -2278,12 +2908,12 @@ jQuery(document).ready(function ($) {
           '<div class="kcite-style">\
 <input type="radio" name="kcite-style' +
             kcite_section_id +
-            '" checked="checked">APA Numeric Superscript Brackets</input>\
+            '" checked="checked">Vancouver</input>\
 </div>'
         );
         style.buttonset();
 
-        // APA Numeric Superscript Brackets is the default style now
+        // Vancouver is the default and only style now
         style.find(":radio").eq(0).prop("checked", "true");
 
         style.appendTo(control_inner);
