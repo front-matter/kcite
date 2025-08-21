@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: https://github.com/phillord/kcite
    Description: Add references and bibliography to blogposts
-   Version: 1.7.59
+   Version: 1.7.60
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -422,7 +422,7 @@ $content
       $script = <<<EOT
 
 <h2>References</h2>
-<ol class="kcite-bibliography csl-bib-body" style="padding-inline-start: 0;"></ol>
+<ol class="kcite-bibliography csl-bib-body" style="list-style-type: none; padding-inline-start: 0;"></ol>
 <script type="text/javascript">var citeproc_controls=false;
 var blog_home_url="$home_url"
 </script>
@@ -442,7 +442,7 @@ EOT;
 
       $i = 1;
       $bib_string = "<h2>References</h2>
-    <ol class=\"kcite-bibliography csl-bib-body\" style=\"padding-inline-start: 0;\">
+    <ol class=\"kcite-bibliography csl-bib-body\" style=\"list-style-type: none; padding-inline-start: 0;\">
     ";
       
       foreach ($pub_array as $pub) {
@@ -458,7 +458,7 @@ EOT;
               }
                           
               $bib_string .= 
-                  "<li style='list-style-type: none;' id=\"#'$anchor\">". $source . $pub["identifier"] .
+                  "<li id=\"#'$anchor\">". $source . $pub["identifier"] .
                   " <i>(Timed out)</i></li>\n";
               $i++;
               continue;                 
@@ -468,19 +468,19 @@ EOT;
               
               //sufficient missing to assume no publication retrieved...
               if (array_key_exists( "DOI", $pub ) && $pub['DOI']) {
-                  $bib_string .= "<li style='list-style-type: none;' id=\"#'$anchor\"><a href='https://doi.org/".
+                  $bib_string .= "<li id=\"#'$anchor\"><a href='https://doi.org/".
                       $pub['DOI']."'>DOI:".$pub['DOI'].
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
               if (array_key_exists( "PMID", $pub ) && $pub['PMID']) {
-                  $bib_string .= "<li style='list-style-type: none;' id=\"$anchor\"><a href='http://www.ncbi.nlm.nih.gov/pubmed/"
+                  $bib_string .= "<li id=\"$anchor\"><a href='http://www.ncbi.nlm.nih.gov/pubmed/"
                       .$pub['PMID']."'>PMID:".$pub['DOI'].
                       "</a> <i>(KCite cannot find metadata for this paper)</i></li>\n";
               }
           }
           else {
 
-              $bib_string .= "<li style='list-style-type: none;' id=\"#'$anchor'>
+              $bib_string .= "<li id=\"#'$anchor'>
 ";
               //
               // author
