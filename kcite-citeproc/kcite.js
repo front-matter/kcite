@@ -2433,10 +2433,19 @@ if (typeof window.kciteSettings !== "undefined") {
 // modify the HTML output format so that the bibliography hyperlinks
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
-  return '<ol class="kcite-bibliography csl-bib-body">' + str + "</ol>";
+  return (
+    '<ul class="kcite-bibliography csl-bib-body" style="list-style-type: none; padding-left: 0;">' +
+    str +
+    "</ul>"
+  );
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
-  return '  <li class="csl-entry" id="' + this.system_id + '">' + str;
+  return (
+    '  <li class="csl-entry" style="list-style: none; margin-bottom: 1em;" id="' +
+    this.system_id +
+    '">' +
+    str
+  );
 };
 
 // kcite output is not hyperlinked or any such. These functions apply filters
@@ -2578,10 +2587,7 @@ jQuery(document).ready(function ($) {
             citation_html = last_citation[1]; // The HTML is in index 1
           }
 
-          // Add hyperlink to bibliography entry if citation was generated
-          var citation = citation_html
-            ? '<a href="#' + cite_id + '">' + citation_html + "</a>"
-            : '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
+          var citation = '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
 
           kcite_element.html(citation);
         });
