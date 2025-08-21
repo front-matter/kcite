@@ -2441,7 +2441,7 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   return (
-    '  <li class="csl-entry" style="list-style: none; margin-bottom: 1em;" id="' +
+    '  <li class="csl-entry" style="list-style: none; margin-bottom: 1em; text-indent: -2em; padding-left: 2em;" id="' +
     this.system_id +
     '">' +
     str
@@ -2566,6 +2566,7 @@ jQuery(document).ready(function ($) {
           var cite_id = kcite_element.attr("kcite-id");
           var cite = sys.retrieveItem(cite_id);
           var bibindex = (index + 1).toString();
+          console.log("Generating citation for:", cite);
 
           // Use citeproc.js built-in functionality to generate citation
           var citation_result = citeproc.appendCitationCluster(
@@ -2582,6 +2583,7 @@ jQuery(document).ready(function ($) {
             citation_result[1].length > 0
           ) {
             // Get the last citation (most recent one added)
+            console.log("citation_result:", citation_result[1]);
             var last_citation =
               citation_result[1][citation_result[1].length - 1];
             citation_html = last_citation[1]; // The HTML is in index 1
