@@ -2441,7 +2441,7 @@ CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   return (
-    '  <li class="csl-entry" style="margin-bottom: 1em; text-indent: -2em; padding-left: 2em;" id="' +
+    '  <li class="csl-entry" style="margin-bottom: 0.5em; text-indent: -1em; padding-left: 1em;" id="' +
     this.system_id +
     '">' +
     str
