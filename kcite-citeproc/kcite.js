@@ -2543,7 +2543,7 @@ jQuery(document).ready(function ($) {
       var kcite_element = $(this);
 
       if (cite["resolved"]) {
-        cite_ids.shift(cite_id);
+        cite_ids.push(cite_id);
         //console.log( "push cite_id" + cite_id );
         // check here whether resolved == true before proceeding.
         var citation_object = {
@@ -2620,7 +2620,7 @@ jQuery(document).ready(function ($) {
     // we have all the IDs now, but haven't calculated the in text
     // citations. So, we need to update citeproc to get the disambiguation
     // correct.
-    task_queue.push(function () {
+    task_queue.unshift(function () {
       // update citeproc with all the ids we will use (which will happen
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
@@ -2720,8 +2720,8 @@ jQuery(document).ready(function ($) {
         return;
       }
 
-      // run next event - using pop() for LIFO processing
-      task_queue.pop()();
+      // run next event - using shift() for FIFO processing
+      task_queue.shift()();
 
       // tail-end recurse with timeout 100 gap is a compromise. If
       // this is set higher rendering takes longer on all machines, too
