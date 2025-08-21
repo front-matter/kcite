@@ -272,7 +272,7 @@ var kcite_styles = {
       <name>Brenton M. Wiernik</name>
       <email>zotero@wiernik.org</email>
     </author>
-    <category citation-format="author-date"/>
+    <category citation-format="numeric"/>
     <category field="psychology"/>
     <category field="generic-base"/>
     <updated>2024-07-09T20:08:41+00:00</updated>
