@@ -2589,7 +2589,10 @@ jQuery(document).ready(function ($) {
             citation_html = last_citation[1]; // The HTML is in index 1
           }
 
-          var citation = '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
+          // Use the formatted citation from citeproc.js, with hyperlink to bibliography
+          var citation = citation_html
+            ? '<a href="#' + cite_id + '">' + citation_html + "</a>"
+            : '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
 
           kcite_element.html(citation);
         });
@@ -2619,13 +2622,13 @@ jQuery(document).ready(function ($) {
 
     // we have all the IDs now, but haven't calculated the in text
     // citations. So, we need to update citeproc to get the disambiguation
-    // correct.
+    // correct. This should run BEFORE individual citations are processed.
     task_queue.unshift(function () {
       // update citeproc with all the ids we will use (which will happen
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
 
-      //console.log( "update items with true" );
+      console.log("Updating citeproc with cite_ids:", cite_ids);
       citeproc.updateItems(cite_ids, true);
     });
 
