@@ -2632,7 +2632,9 @@ if (typeof window.kciteSettings !== "undefined") {
 // modify the HTML output format so that the bibliography hyperlinks
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
-  return '<ol class="csl-bib-body">\n' + str + "</ol>";
+  return (
+    '<ol class="csl-bib-body" style="list-style-type: none;">\n' + str + "</ol>"
+  );
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   return '  <li class="csl-entry" id="' + this.system_id + '">' + str;
