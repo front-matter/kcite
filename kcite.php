@@ -441,7 +441,7 @@ EOT;
   private static function build_bibliography($pub_array) {
 
       $bib_string = "<h2>References</h2>
-    <ul class=\"kcite-bibliography csl-bib-body\" style=\"list-style-type: none; padding-left: 0;\">
+    <ol class=\"kcite-bibliography csl-bib-body\" style=\"list-style-type: none; padding-left: 0;\">
     ";
       
       // Process references in array order to maintain citation sequence
@@ -555,7 +555,7 @@ EOT;
 ";
           }
       }
-      $bib_string .= "</ul>
+      $bib_string .= "</ol>
 ";
 
       if( self::$bibliography->contains_timeout ){
