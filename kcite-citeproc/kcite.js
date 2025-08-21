@@ -2584,6 +2584,7 @@ jQuery(document).ready(function ($) {
           ) {
             // Get the last citation (most recent one added)
             console.log("citation_result:", citation_result[1]);
+            console.log("citation_html:", citation_html);
             var last_citation =
               citation_result[1][citation_result[1].length - 1];
             citation_html = last_citation[1]; // The HTML is in index 1
