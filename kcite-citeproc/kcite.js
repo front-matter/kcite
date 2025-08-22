@@ -4443,6 +4443,18 @@ jQuery(document).ready(function ($) {
               : "Rogue Scholar";
         }
 
+        // Map some Crossref and DataCite types to CSL types
+        // CSL types are listed here: https://docs.citationstyles.org/en/stable/specification.html?highlight=book#appendix-iii-types
+        var type_map = {
+          blogpost: "post-weblog",
+          "journal-article": "article-journal",
+          "posted-content": "article",
+        };
+
+        if (item && item.type in type_map) {
+          item.type = type_map[item.type];
+        }
+
         return item;
       },
 
