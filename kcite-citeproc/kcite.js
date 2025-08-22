@@ -2415,7 +2415,7 @@ var kcite_styles = {
 };
 
 // Default settings - will be overridden by WordPress settings if available
-var kcite_default_style = "apa-numeric-superscript-brackets";
+var kcite_default_style = "apa";
 var kcite_default_locale = "en-US";
 
 // Load WordPress settings if available
@@ -2452,6 +2452,29 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // to make it better. As these are style specific they don't need to be
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
+
+kcite_style_cleaner["apa"] = function (bib_item) {
+  // URL linkify here - supports both http and https
+  var httpPos = bib_item.lastIndexOf("http://");
+  var httpsPos = bib_item.lastIndexOf("https://");
+  var urlStart = Math.max(httpPos, httpsPos);
+
+  if (urlStart === -1) {
+    return bib_item;
+  }
+
+  var url = bib_item.substring(urlStart, bib_item.length);
+
+  // Validate that we have a reasonable URL
+  if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
+    return bib_item;
+  }
+
+  // Replace the URL with a clickable link
+  return (
+    bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
+  );
+};
 
 kcite_style_cleaner["apa-numeric-superscript-brackets"] = function (bib_item) {
   // URL linkify here - supports both http and https
@@ -2522,9 +2545,9 @@ jQuery(document).ready(function ($) {
       var bibindex = parseInt(cite_id.split("-").pop()) + 1;
       // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
-      console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
+      // console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
 
-      // Check if the citation is resolved and not already in the list
+      // Check if the citation is resolved
       if (cite["resolved"]) {
         cite_ids.push(cite_id);
         var citation_object = {
@@ -2540,29 +2563,7 @@ jQuery(document).ready(function ($) {
 
         // add in the citation and bibliography fetch the citation. In
         // this case, the citation to be included is hard coded.
-
-        // TODO the citation object returned may include errors which we
-        // haven't checked for here.
         task_queue.push(function () {
-          // Use citeproc.js built-in functionality to generate citation
-          //   var citation_result = citeproc.appendCitationCluster(
-          //     citation_object,
-          //     true
-          //   );
-
-          // Extract the formatted citation from citeproc result
-          // citation_result[1] contains array of [citation_index, citation_html, citation_id]
-          //   var citation_html = "*";
-
-          //   if (
-          //     citation_result &&
-          //     citation_result[1] &&
-          //     citation_result[1].length > 0
-          //   ) {
-          //     console.log("Extracted citation data:", citation_result[1]);
-          //     citation_html = citation_result[1][1];
-          //   }
-
           var citation =
             '<a href="#' + cite_id + '">[' + String(bibindex) + "]</a>";
 
@@ -2600,7 +2601,7 @@ jQuery(document).ready(function ($) {
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
 
-      console.log("Updating citeproc with cite_ids:", cite_ids);
+      // console.log("Updating citeproc with cite_ids:", cite_ids);
       citeproc.updateItems(cite_ids, true);
     });
 
