@@ -2541,11 +2541,10 @@ jQuery(document).ready(function ($) {
       var cite = sys.retrieveItem(cite_id);
       // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
+      console.log("cite_id:", cite_id, "cite:", cite, "index:", index);
 
       if (cite["resolved"]) {
         cite_ids.push(cite_id);
-        //console.log( "push cite_id" + cite_id );
-        // check here whether resolved == true before proceeding.
         var citation_object = {
           citationItems: [
             {
@@ -2563,11 +2562,6 @@ jQuery(document).ready(function ($) {
         // TODO the citation object returned may include errors which we
         // haven't checked for here.
         task_queue.push(function () {
-          var cite_id = kcite_element.attr("kcite-id");
-          var cite = sys.retrieveItem(cite_id);
-          var bibindex = (index + 1).toString();
-          console.log("Generating citation for:", cite);
-
           // Use citeproc.js built-in functionality to generate citation
           var citation_result = citeproc.appendCitationCluster(
             citation_object,
@@ -2583,6 +2577,7 @@ jQuery(document).ready(function ($) {
             citation_result[1] &&
             citation_result[1].length > 0
           ) {
+            console.log("Extracted citation data:", citation_result[1]);
             citation_html = citation_result[1][1];
           }
 
