@@ -4503,6 +4503,9 @@ jQuery(document).ready(function ($) {
       }
     });
 
+    // Sort cite_ids to ensure consistent ordering
+    cite_ids.sort();
+
     // we have all the IDs now, but haven't calculated the in text
     // citations. So, we need to update citeproc to get the disambiguation
     // correct. This should run BEFORE individual citations are processed.
@@ -4511,7 +4514,7 @@ jQuery(document).ready(function ($) {
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
 
-      // console.log("Updating citeproc with cite_ids:", cite_ids);
+      console.log("Updating citeproc with cite_ids:", cite_ids);
       citeproc.updateItems(cite_ids, true);
     });
 
