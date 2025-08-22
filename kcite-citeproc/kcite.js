@@ -2430,7 +2430,7 @@ var kcite_default_locale = "en-US";
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
   return (
-    '<ol class="kcite-bibliography csl-bib-body" style="padding-inline-start: 0;">' +
+    '<ol class="kcite-bibliography csl-bib-body" style="padding-inline-start: 1em;">' +
     str +
     "</ol>"
   );
