@@ -4443,6 +4443,33 @@ jQuery(document).ready(function ($) {
               : "Rogue Scholar";
         }
 
+        // months
+        var monthString =
+          "january february march april may june july august september october november december spring summer fall winter spring summer";
+
+        // Map month integer to month name for CSL compatibility
+        if (
+          item &&
+          item.issued &&
+          item.issued["date-parts"] &&
+          Array.isArray(item.issued["date-parts"]) &&
+          item.issued["date-parts"].length > 0 &&
+          Array.isArray(item.issued["date-parts"][0]) &&
+          item.issued["date-parts"][0].length > 1
+        ) {
+          var monthInt = item.issued["date-parts"][0][1]; // Month is at index 1 (0=year, 1=month, 2=day)
+          if (typeof monthInt === "number" && monthInt >= 1 && monthInt <= 12) {
+            var months = monthString.split(" ");
+            var monthName = months[monthInt - 1]; // Convert 1-based to 0-based index
+
+            // Add the month name to the item for CSL processing
+            if (!item.issued.month) {
+              item.issued.month = monthName;
+            }
+            console.log("Mapped month", monthInt, "to", monthName);
+          }
+        }
+
         // Map some Crossref and DataCite types to CSL types
         // CSL types are listed here: https://docs.citationstyles.org/en/stable/specification.html?highlight=book#appendix-iii-types
         var type_map = {
