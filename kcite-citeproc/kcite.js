@@ -2536,12 +2536,13 @@ jQuery(document).ready(function ($) {
     var cite_ids = [];
 
     // select all of the kcite citations
-    kcite_section.find(".kcite").each(function (index) {
+    kcite_section.find(".kcite").each(function () {
       var cite_id = $(this).attr("kcite-id");
+      var id = cite_id.split("-").pop();
       var cite = sys.retrieveItem(cite_id);
       // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
-      console.log("cite_id:", cite_id, "cite:", cite, "index:", index);
+      console.log("cite_id:", cite_id, "cite:", cite, "id:", id);
 
       if (cite["resolved"]) {
         cite_ids.push(cite_id);
@@ -2552,7 +2553,7 @@ jQuery(document).ready(function ($) {
             },
           ],
           properties: {
-            noteIndex: index, // Use index directly (0-based is fine, but must be sequential)
+            noteIndex: id,
           },
         };
 
