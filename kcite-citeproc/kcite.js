@@ -2576,7 +2576,9 @@ jQuery(document).ready(function ($) {
 
           // Extract the formatted citation from citeproc result
           // citation_result[1] contains array of [citation_index, citation_html, citation_id]
+          var citation_index = null;
           var citation_html = "";
+
           if (
             citation_result &&
             citation_result[1] &&
@@ -2584,13 +2586,16 @@ jQuery(document).ready(function ($) {
           ) {
             // Get the last citation (most recent one added)
             console.log("citation_result:", citation_result[1]);
-            console.log("citation_html:", citation_html);
+
             var last_citation =
               citation_result[1][citation_result[1].length - 1];
-            citation_html = last_citation[1]; // The HTML is in index 1
+
+            // Extract all three components from the result array
+            citation_index = last_citation[0]; // The index is in position 0
+            citation_html = last_citation[1]; // The HTML is in position 1
           }
 
-          var citation = '<a href="#' + cite_id + '">[' + bibindex + "]</a>";
+          var citation = '<a href="#' + cite_id + '">' + citation_html + "</a>";
 
           kcite_element.html(citation);
         });
