@@ -4503,7 +4503,7 @@ jQuery(document).ready(function ($) {
       var bibindex = parseInt(cite_id.split("-").pop()) + 1;
       // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
-      console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
+      // console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
 
       // Check if the citation is resolved
       if (cite["resolved"]) {
