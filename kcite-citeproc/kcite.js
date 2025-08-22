@@ -2634,6 +2634,9 @@ jQuery(document).ready(function ($) {
           "the wrong identifier has been used, or it is not present in the remote " +
           "databases.</p>";
       }
+
+      // dump the bibliography into the document
+      kcite_bib_element.find(".kcite-bibliography").html(bib_string);
     });
 
     // now we have all the work in place, just need to run everything.
