@@ -4334,29 +4334,26 @@ var kcite_styles = {
   </citation>
   <bibliography hanging-indent="true" et-al-min="21" et-al-use-first="19" et-al-use-last="true" entry-spacing="0" line-spacing="2">
     <layout>
-      <group delimiter=". ">
-        <text variable="citation-number"/>
-        <choose>
-          <if type="bill hearing legal_case legislation regulation treaty" match="any">
-            <!-- Legal items have different orders and delimiters -->
-            <text macro="legal-cites"/>
-          </if>
-          <else>
-            <group delimiter=" ">
-              <group delimiter=". " suffix=".">
-                <text macro="author-bib"/>
-                <text macro="date-bib"/>
-                <text macro="title-and-descriptions"/>
-                <text macro="container"/>
-                <text macro="event"/>
-                <text macro="publisher"/>
-              </group>
-              <text macro="access"/>
-              <text macro="publication-history"/>
-            </group>
-          </else>
-        </choose>
-      </group>
+      <choose>
+        <if type="bill hearing legal_case legislation regulation treaty" match="any">
+        <!-- Legal items have different orders and delimiters -->
+        <text macro="legal-cites"/>
+        </if>
+        <else>
+        <group delimiter=" ">
+          <group delimiter=". " suffix=".">
+          <text macro="author-bib"/>
+          <text macro="date-bib"/>
+          <text macro="title-and-descriptions"/>
+          <text macro="container"/>
+          <text macro="event"/>
+          <text macro="publisher"/>
+          </group>
+          <text macro="access"/>
+          <text macro="publication-history"/>
+        </group>
+        </else>
+      </choose>
     </layout>
   </bibliography>
 </style>`,
