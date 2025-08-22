@@ -5,7 +5,7 @@
  * Compatible with WordPress 6.8+ and PHP 8.4+
  * 
  * @package Kcite
- * @version 1.7.96
+ * @version 1.7.97
  */
 
 // Prevent direct access
@@ -262,9 +262,6 @@ EOT;
         }
 
         update_option('kcite_cache_references', isset($_POST['kcite_cache_references']));
-
-        // Save CSL settings
-        $this->save_csl_settings();
     }
 }
 
