@@ -4425,7 +4425,21 @@ jQuery(document).ready(function ($) {
 
     var sys = {
       retrieveItem: function (id) {
-        return citation_data[id];
+        var item = citation_data[id];
+
+        // Transform article type to weblog-post if publisher is "Front Matter"
+        // Workaround until Crossref can set type blog post
+        if (
+          item &&
+          item.type === "article" &&
+          item.publisher === "Front Matter"
+        ) {
+          // Create a copy to avoid modifying the original data
+          item = Object.assign({}, item);
+          item.type = "post-weblog";
+        }
+
+        return item;
       },
 
       retrieveLocale: function (lang) {
@@ -4455,7 +4469,7 @@ jQuery(document).ready(function ($) {
       var bibindex = parseInt(cite_id.split("-").pop()) + 1;
       // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
-      // console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
+      console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
 
       // Check if the citation is resolved
       if (cite["resolved"]) {
@@ -4503,7 +4517,7 @@ jQuery(document).ready(function ($) {
       }
     });
 
-    // Sort cite_ids to ensure consistent ordering
+    // Sort cite_ids to ensure consistent ordering for numeric style
     cite_ids.sort();
 
     // we have all the IDs now, but haven't calculated the in text
@@ -4514,7 +4528,6 @@ jQuery(document).ready(function ($) {
       // when we tail recurse). this method call is a little problematic and
       // can cause timeout with large numbers of references
 
-      console.log("Updating citeproc with cite_ids:", cite_ids);
       citeproc.updateItems(cite_ids, true);
     });
 
