@@ -2452,28 +2452,6 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // to make it better. As these are style specific they don't need to be
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
-kcite_style_cleaner["apa"] = function (bib_item) {
-  // URL linkify here - supports both http and https
-  var httpPos = bib_item.lastIndexOf("http://");
-  var httpsPos = bib_item.lastIndexOf("https://");
-  var urlStart = Math.max(httpPos, httpsPos);
-
-  if (urlStart === -1) {
-    return bib_item;
-  }
-
-  var url = bib_item.substring(urlStart, bib_item.length);
-
-  // Validate that we have a reasonable URL
-  if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
-    return bib_item;
-  }
-
-  // Replace the URL with a clickable link
-  return (
-    bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
-  );
-};
 
 kcite_style_cleaner["apa-numeric-superscript-brackets"] = function (bib_item) {
   // URL linkify here - supports both http and https
@@ -2538,13 +2516,11 @@ jQuery(document).ready(function ($) {
     // select all of the kcite citations
     kcite_section.find(".kcite").each(function () {
       var cite_id = $(this).attr("kcite-id");
-      var id = cite_id.split("-").pop();
+      var idx = cite_id.split("-").pop();
       var cite = sys.retrieveItem(cite_id);
-      // not sure about closure semantics with jquery -- this might not be necessary
-      var kcite_element = $(this);
-      console.log("cite_id:", cite_id, "cite:", cite, "id:", id);
+      console.log("cite_id:", cite_id, "cite:", cite, "idx:", idx);
 
-      if (cite["resolved"]) {
+      if (cite["resolved"] && cite_ids.indexOf(cite_id) === -1) {
         cite_ids.push(cite_id);
         var citation_object = {
           citationItems: [
@@ -2553,7 +2529,7 @@ jQuery(document).ready(function ($) {
             },
           ],
           properties: {
-            noteIndex: id,
+            noteIndex: idx,
           },
         };
 
@@ -2571,7 +2547,7 @@ jQuery(document).ready(function ($) {
 
           // Extract the formatted citation from citeproc result
           // citation_result[1] contains array of [citation_index, citation_html, citation_id]
-          var citation_html = "";
+          var citation_html = "*";
 
           if (
             citation_result &&
@@ -2584,7 +2560,7 @@ jQuery(document).ready(function ($) {
 
           var citation = '<a href="#' + cite_id + '">' + citation_html + "</a>";
 
-          kcite_element.html(citation);
+          $this.html(citation);
         });
       }
       // so we have an unresolved element
@@ -2596,14 +2572,14 @@ jQuery(document).ready(function ($) {
         // if this is a simple timeout
         if (cite["timeout"]) {
           task_queue.push(function () {
-            kcite_element.html(link + '<a href="#kcite-timeout">*</a>');
+            $this.html(link + '<a href="#kcite-timeout">*</a>');
           });
           section_contains_timeout = true;
         }
         // there is some other error
         else {
           task_queue.push(function () {
-            kcite_element.html(link + '<a href="#kcite-unresolved">*</a>');
+            $this.html(link + '<a href="#kcite-unresolved">*</a>');
           });
           section_contains_unresolved = true;
         }
