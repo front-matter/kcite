@@ -2543,10 +2543,10 @@ jQuery(document).ready(function ($) {
         // haven't checked for here.
         task_queue.push(function () {
           // Use citeproc.js built-in functionality to generate citation
-          var citation_result = citeproc.appendCitationCluster(
-            citation_object,
-            true
-          );
+          //   var citation_result = citeproc.appendCitationCluster(
+          //     citation_object,
+          //     true
+          //   );
 
           // Extract the formatted citation from citeproc result
           // citation_result[1] contains array of [citation_index, citation_html, citation_id]
@@ -2634,56 +2634,6 @@ jQuery(document).ready(function ($) {
           "the wrong identifier has been used, or it is not present in the remote " +
           "databases.</p>";
       }
-
-      // dump the bibliography into the document
-      kcite_bib_element.find(".kcite-bibliography").html(bib_string);
-      var section_id;
-
-      // switch on or off from kcite.php
-      if (citeproc_controls) {
-        // set up main div elements
-        var control_outer = $(
-          '<div class="kcite-bibliography-control-outer"></div>'
-        );
-        var control_inner = $(
-          '<div class="kcite-bibliography-control-inner"></div>'
-        );
-
-        control_inner.toggle(kcite_controls_shown);
-        control_inner.appendTo(control_outer);
-
-        var control = $("<button>Control</button>");
-        control.button();
-        control.click(function () {
-          kcite_controls_shown = !kcite_controls_shown;
-          control_inner.toggle(kcite_controls_shown);
-        });
-        control.prependTo(control_outer);
-
-        var reload = $("<button>Reload</button>");
-        reload.button();
-        reload.click(function () {
-          load_bibliography();
-        });
-        reload.appendTo(control_inner);
-
-        var style = $(
-          '<div class="kcite-style">\
-<input type="radio" name="kcite-style' +
-            kcite_section_id +
-            '" checked="checked">apa-numeric-superscript-brackets</input>\
-</div>'
-        );
-        style.buttonset();
-
-        // apa-numeric-superscript-brackets is the default and only style now
-        style.find(":radio").eq(0).prop("checked", "true");
-
-        style.appendTo(control_inner);
-
-        // insert into page
-        control_outer.prependTo(kcite_bib_element.find(".kcite-bibliography"));
-      } // end citeproc controls
     });
 
     // now we have all the work in place, just need to run everything.
