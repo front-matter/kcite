@@ -2414,17 +2414,9 @@ var kcite_styles = {
 </style>`,
 };
 
-// Default settings - will be overridden by WordPress settings if available
-var kcite_default_style = "apa";
+// Default settings
+var kcite_default_style = "apa-numeric-superscript-brackets";
 var kcite_default_locale = "en-US";
-
-// Load WordPress settings if available
-if (typeof window.kciteSettings !== "undefined") {
-  kcite_default_style =
-    window.kciteSettings.defaultStyle || kcite_default_style;
-  kcite_default_locale =
-    window.kciteSettings.defaultLocale || kcite_default_locale;
-}
 
 // ====================================================================
 // KCITE CITATION PROCESSING AND OUTPUT
@@ -2452,29 +2444,6 @@ CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
 // to make it better. As these are style specific they don't need to be
 // clever, and can depend on the style details
 var kcite_style_cleaner = {};
-
-kcite_style_cleaner["apa"] = function (bib_item) {
-  // URL linkify here - supports both http and https
-  var httpPos = bib_item.lastIndexOf("http://");
-  var httpsPos = bib_item.lastIndexOf("https://");
-  var urlStart = Math.max(httpPos, httpsPos);
-
-  if (urlStart === -1) {
-    return bib_item;
-  }
-
-  var url = bib_item.substring(urlStart, bib_item.length);
-
-  // Validate that we have a reasonable URL
-  if (url.length < 10 || !url.match(/^https?:\/\/.+\..+/)) {
-    return bib_item;
-  }
-
-  // Replace the URL with a clickable link
-  return (
-    bib_item.substring(0, urlStart) + '<a href="' + url + '">' + url + "</a>"
-  );
-};
 
 kcite_style_cleaner["apa-numeric-superscript-brackets"] = function (bib_item) {
   // URL linkify here - supports both http and https
