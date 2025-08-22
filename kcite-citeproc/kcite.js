@@ -4436,7 +4436,7 @@ jQuery(document).ready(function ($) {
         ) {
           // Create a copy to avoid modifying the original data
           item = Object.assign({}, item);
-          item.subtype = "blogpost";
+          item.type = "blogpost";
           item["container-title"] =
             item.institution && item.institution.length > 0
               ? item.institution[0].name
