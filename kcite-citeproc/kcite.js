@@ -2429,11 +2429,7 @@ var kcite_default_locale = "en-US";
 // modify the HTML output format so that the bibliography hyperlinks
 CSL.Output.Formats.kcite = CSL.Output.Formats.html;
 CSL.Output.Formats.kcite["@bibliography/body"] = function (state, str) {
-  return (
-    '<ol class="kcite-bibliography csl-bib-body" style="padding-inline-start: 1em;">' +
-    str +
-    "</ol>"
-  );
+  return '<ol class="kcite-bibliography csl-bib-body">' + str + "</ol>";
 };
 CSL.Output.Formats.kcite["@bibliography/entry"] = function (state, str) {
   return (

@@ -3,7 +3,7 @@
    Plugin Name: Kcite
    Plugin URI: https://github.com/phillord/kcite
    Description: Add references and bibliography to blogposts
-   Version: 1.7.87
+   Version: 1.7.88
    Author: Simon Cockell, Phillip Lord, Martin Fenner
    Author URI: http://knowledgeblog.org
    Email: knowledgeblog@googlegroups.com
@@ -422,7 +422,7 @@ $content
       $script = <<<EOT
 
 <h2>References</h2>
-<ol class="kcite-bibliography csl-bib-body" style="padding-inline-start: 1em;"></ol>
+<ol class="kcite-bibliography csl-bib-body"></ol>
 <script type="text/javascript">var blog_home_url="$home_url"
 </script>
 
@@ -439,14 +439,14 @@ EOT;
    */
   private static function build_bibliography($pub_array) {
 
+      $i = 1;
       $bib_string = "<h2>References</h2>
-    <ol class=\"kcite-bibliography csl-bib-body\" style=\"padding-inline-start: 1em;\">";
+    <ol class=\"kcite-bibliography csl-bib-body\">";
       
       // Process references in array order to maintain citation sequence
-      foreach ($pub_array as $index => $pub) {
+      foreach ($pub_array as $pub) {
 
           $anchor = $pub['id'];
-          $display_number = $index + 1; // 1-based numbering for display
           
           if( array_key_exists( "timeout", $pub ) ){
               if( array_key_exists( "source", $pub ) ){
