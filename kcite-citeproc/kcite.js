@@ -2550,18 +2550,18 @@ jQuery(document).ready(function ($) {
 
           // Extract the formatted citation from citeproc result
           // citation_result[1] contains array of [citation_index, citation_html, citation_id]
-          var citation_html = "*";
+          //   var citation_html = "*";
 
-          if (
-            citation_result &&
-            citation_result[1] &&
-            citation_result[1].length > 0
-          ) {
-            console.log("Extracted citation data:", citation_result[1]);
-            citation_html = citation_result[1][1];
-          }
+          //   if (
+          //     citation_result &&
+          //     citation_result[1] &&
+          //     citation_result[1].length > 0
+          //   ) {
+          //     console.log("Extracted citation data:", citation_result[1]);
+          //     citation_html = citation_result[1][1];
+          //   }
 
-          var citation = '<a href="#' + cite_id + '">' + citation_html + "</a>";
+          var citation = '<a href="#' + cite_id + '">[' + idx + "]</a>";
 
           kcite_element.html(citation);
         });
