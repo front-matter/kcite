@@ -4427,16 +4427,20 @@ jQuery(document).ready(function ($) {
       retrieveItem: function (id) {
         var item = citation_data[id];
 
-        // Transform article type to weblog-post if publisher is "Front Matter"
-        // Workaround until Crossref can set type blog post
+        // Transform container title if type is posted-content and publisher is "Front Matter"
+        // Workaround until Crossref can set subtype blog post
         if (
           item &&
-          item.type === "article" &&
+          item.type === "posted-content" &&
           item.publisher === "Front Matter"
         ) {
           // Create a copy to avoid modifying the original data
           item = Object.assign({}, item);
-          item.type = "post-weblog";
+          item.subtype = "blogpost";
+          item["container-title"] =
+            item.institution && item.institution.length > 0
+              ? item.institution[0].name
+              : "Rogue Scholar";
         }
 
         return item;
