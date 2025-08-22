@@ -2398,7 +2398,7 @@ var kcite_styles = {
       <key macro="title"/>
     </sort>
     <layout>
-      <text variable="citation-number" suffix=". "/>
+      <!-- Removed citation-number as this is done in css -->
       <group delimiter=". " suffix=".">
         <text macro="author-bib"/>
         <group delimiter=" ">
