@@ -2516,15 +2516,16 @@ jQuery(document).ready(function ($) {
     // select all of the kcite citations
     kcite_section.find(".kcite").each(function () {
       var cite_id = $(this).attr("kcite-id");
-      // Make idx for reference 1-based instead of 0-based
-      var idx = parseInt(cite_id.split("-").pop()) + 1;
       var cite = sys.retrieveItem(cite_id);
+
+      // Make bibindex for reference 1-based instead of 0-based
+      var bibindex = parseInt(cite_id.split("-").pop()) + 1;
       // not sure about closure semantics with jquery -- this might not be necessary
       var kcite_element = $(this);
-      console.log("cite_id:", cite_id, "cite:", cite, "idx:", idx);
+      console.log("cite_id:", cite_id, "cite:", cite, "bibindex:", bibindex);
 
       // Check if the citation is resolved and not already in the list
-      if (cite["resolved"] && cite_ids.indexOf(cite_id) === -1) {
+      if (cite["resolved"]) {
         cite_ids.push(cite_id);
         var citation_object = {
           citationItems: [
@@ -2533,7 +2534,7 @@ jQuery(document).ready(function ($) {
             },
           ],
           properties: {
-            noteIndex: idx,
+            noteIndex: bibindex,
           },
         };
 
@@ -2562,7 +2563,8 @@ jQuery(document).ready(function ($) {
           //     citation_html = citation_result[1][1];
           //   }
 
-          var citation = '<a href="#' + cite_id + '">[' + String(idx) + "]</a>";
+          var citation =
+            '<a href="#' + cite_id + '">[' + String(bibindex) + "]</a>";
 
           kcite_element.html(citation);
         });
